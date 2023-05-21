@@ -13,3 +13,4 @@ upd.Check_Arrays()
 different_date = abs((date.today() - prm.last_Update).days)
 if different_date >= prm.frequency:
     upd.Check_Update_Arrays()
+    

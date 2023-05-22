@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>947</width>
-    <height>737</height>
+    <width>1264</width>
+    <height>791</height>
    </rect>
   </property>
   <property name="font">
@@ -301,6 +301,45 @@
        <attribute name="title">
         <string>О программе</string>
        </attribute>
+       <widget class="QLabel" name="label_6">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>20</y>
+          <width>61</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Версия:</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_7">
+        <property name="geometry">
+         <rect>
+          <x>90</x>
+          <y>30</y>
+          <width>35</width>
+          <height>10</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>1.0</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_8">
+        <property name="geometry">
+         <rect>
+          <x>140</x>
+          <y>30</y>
+          <width>131</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>(последняя)</string>
+        </property>
+       </widget>
       </widget>
      </widget>
     </item>
@@ -311,8 +350,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>947</width>
-     <height>21</height>
+     <width>1264</width>
+     <height>18</height>
     </rect>
    </property>
   </widget>

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1091</width>
+    <width>911</width>
     <height>730</height>
    </rect>
   </property>
@@ -31,6 +31,9 @@
         <string>Главная</string>
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_12">
+        <property name="spacing">
+         <number>10</number>
+        </property>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_5">
           <item>
@@ -134,7 +137,14 @@
                 </widget>
                </item>
                <item>
-                <widget class="QLineEdit" name="LE_Separator"/>
+                <widget class="QLineEdit" name="LE_Separator">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                </widget>
                </item>
               </layout>
              </item>
@@ -151,7 +161,11 @@
                 </widget>
                </item>
                <item>
-                <widget class="QLineEdit" name="LE_Column_w_Phone"/>
+                <widget class="QSpinBox" name="SPINBOX_Column_w_Phone">
+                 <property name="minimum">
+                  <number>1</number>
+                 </property>
+                </widget>
                </item>
               </layout>
              </item>
@@ -195,6 +209,9 @@
                  <widget class="QRadioButton" name="RADIO_Insert_After_Phone">
                   <property name="text">
                    <string>Колонки с номером телефона</string>
+                  </property>
+                  <property name="checked">
+                   <bool>true</bool>
                   </property>
                  </widget>
                 </item>
@@ -456,6 +473,13 @@
             </layout>
            </item>
           </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="Line" name="line_3">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
          </widget>
         </item>
         <item>
@@ -844,7 +868,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1091</width>
+     <width>911</width>
      <height>18</height>
     </rect>
    </property>

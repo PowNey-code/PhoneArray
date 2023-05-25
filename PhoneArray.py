@@ -20,7 +20,7 @@ prm = Params()
 
 
 
-ClassUI = ClassFromUI(P + 'UI.ui').load()
+ClassUI = ClassFromUI(P + 'UI.ui')
 class UI(QMainWindow, ClassUI):
     def __init__(self):
         super(UI, self).__init__()

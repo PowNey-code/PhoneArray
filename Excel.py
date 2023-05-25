@@ -3,21 +3,16 @@ import pandas as pd
 class Read:
     def __init__(self, inputFile):
         self.inputFile = inputFile
+        
+    def Read_xlx(self):
         self.DF = pd.read_excel(self.inputFile)
+
+    def Read_csv(self, sep):
+        self.DF = pd.read_csv(self.inputFile, sep=sep, encoding_errors='ignore')
 
     def GetFullDataFrame(self):
         return self.DF
     
-    def SetCols(self, cols_with_address):
-        address_in = []
-        for col in cols_with_address:
-            address_in += self.DF[col].tolist()
-
-        # Удаляем дубликаты из списка
-        self.UniqAddress = list(set(address_in))
-        self.CountUniqAddress = len(self.UniqAddress)
-        return self.GetUniqAddress()
-
     def GetListAllCols(self):
         return self.DF.columns.tolist()
 
@@ -27,25 +22,6 @@ class Read:
 
     def GetFullData(self):
         return self.DF.values
-
-    def GetUniqAddress(self):
-        return self.UniqAddress
-
-    def GetCountUniqAddress(self):
-        return self.CountUniqAddress
-
-    def GetCountAllAddress(self):
-        return len(self.DF.values) * 2
-
-    def SetUniqAddress(self, NewListUniqAddress):
-        if type(NewListUniqAddress == list):
-            self.UniqAddress = NewListUniqAddress
-        else:
-            self.UniqAddress = list(NewListUniqAddress)
-        self.CountUniqAddress = len(self.UniqAddress)
-        
-    def __del__(self):
-        pass
 
 class Write:
     def __init__(self, columns):

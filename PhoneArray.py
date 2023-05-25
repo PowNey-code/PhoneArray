@@ -4,6 +4,7 @@ from params import P, Params
 import Update as upd
 from MakeClassFromUI import ClassFromUI
 import Excel
+import fff as f
 from datetime import datetime, date
 import time
 import os
@@ -27,36 +28,33 @@ class UI(QMainWindow, ClassUI):
         super(UI, self).__init__()
         self.setupUi(self)
 
-        self.LE_Path.setText('ddddd')
-        self.LE_Separator.setText(';')
-        
-
+        self.SrcFullPathFile = ''
         self.BTN_Browse.clicked.connect(self.BTN_Open)
         self.TBTN_Reset_Path.clicked.connect(self.BTN_Open_Reset)
+
+        # self.BTN_Render.setEnabled(True)
 
 
         self.show()
 
     def BTN_Open(self):
-        print('Опен')
         path = QFileDialog.getOpenFileName(
-            parent=None,
             caption='Выбрать XLSX, XLS или CSV файл',
             dir=os.environ['USERPROFILE'] + '\Desktop',
             filter='Excel File (*.xlsx *.xls *.csv)',
-            initialFilter='Excel File (*.xlsx *.xls *.csv)'
+            selectedFilter='Excel File (*.xlsx *.xls *.csv)'
         )[0]
         if not path == '':
             self.SrcFullPathFile = path.replace('/', '\\')
-            Src_FileName = os.path.basename(self.SrcFullPathFile)
-            self.Src_FileName, self.Src_FileExtension = os.path.splitext(Src_FileName)
-            self.LE_Path.setText(self.FullPathFile)
+            
+            self.LE_Path.setText(self.SrcFullPathFile)
 
             if not self.SrcFullPathFile == '':
-                self.SrcContent = Excel.Read(self.SrcFullPathFile)
+                self.SrcContent = self.Read_SrcContent()
 
-                Src_ListAllCols = self.SrcContent.GetListAllCols()
-                print(Src_ListAllCols)
+                self.Src_ListAllCols = self.SrcContent.GetListAllCols()
+                self.Src_LenAllCols = len(self.Src_ListAllCols)
+                print(self.Src_ListAllCols)
                 # self.Columns_SrcNew.clear()
                 # self.SrcNew_SelectedColumns.clear()
                 # if len(self.AsGoodPrecision) > 0:
@@ -75,7 +73,39 @@ class UI(QMainWindow, ClassUI):
 
 
     def BTN_Open_Reset(self):
+        self.BTN_Render.setEnabled(False)
+        self.LE_Path.setText('')
+        self.LE_Separator.setText('')
+        self.SrcFullPathFile = ''
         print('НЕ Опен')
+
+    def Read_SrcContent(self):
+        Src_FileName = os.path.basename(self.SrcFullPathFile)
+        self.Src_FileName, self.Src_FileExtension = os.path.splitext(Src_FileName)
+        
+        SrcContent = Excel.Read(self.SrcFullPathFile)
+        if self.Src_FileExtension.lower() == '.csv':    
+            
+            encode = f.get_encode_file_auto(self.SrcFullPathFile)
+
+
+            self.header = f.find_header_csv(self.SrcFullPathFile, encode)
+            if self.header:
+                self.RADIO_Head_Y.setChecked(True)
+            else:
+                self.RADIO_Head_N.setChecked(True)
+
+            self.sep = f.find_separator(self.SrcFullPathFile, encode)
+            # если сепаратор не найден
+            if self.sep:
+                self.LE_Separator.setText(self.sep)
+                SrcContent.Read_csv(self.sep)
+            else:
+                pass
+        else:
+            SrcContent.Read_xlx()
+
+        return SrcContent
 
 
 if __name__ == "__main__":

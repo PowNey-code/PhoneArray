@@ -111,14 +111,17 @@
                  <number>8</number>
                 </property>
                 <item>
-                 <widget class="QRadioButton" name="RBTN_Head_Y">
+                 <widget class="QRadioButton" name="RADIO_Head_Y">
                   <property name="text">
                    <string>Есть</string>
+                  </property>
+                  <property name="checked">
+                   <bool>true</bool>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QRadioButton" name="RBTN_Head_N">
+                 <widget class="QRadioButton" name="RADIO_Head_N">
                   <property name="text">
                    <string>Нет</string>
                   </property>
@@ -136,13 +139,19 @@
                  </property>
                 </widget>
                </item>
-               <item>
+               <item alignment="Qt::AlignRight">
                 <widget class="QLineEdit" name="LE_Separator">
                  <property name="sizePolicy">
                   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                    <horstretch>0</horstretch>
                    <verstretch>0</verstretch>
                   </sizepolicy>
+                 </property>
+                 <property name="baseSize">
+                  <size>
+                   <width>0</width>
+                   <height>0</height>
+                  </size>
                  </property>
                 </widget>
                </item>
@@ -515,7 +524,10 @@
          </layout>
         </item>
         <item>
-         <widget class="QPushButton" name="pushButton_3">
+         <widget class="QPushButton" name="BTN_Render">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="text">
            <string>Обработать</string>
           </property>

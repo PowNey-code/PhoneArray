@@ -7,8 +7,8 @@ class Read:
     def Read_xlx(self):
         self.DF = pd.read_excel(self.inputFile)
 
-    def Read_csv(self, sep):
-        self.DF = pd.read_csv(self.inputFile, sep=sep, encoding_errors='ignore')
+    def Read_csv(self, sep, encode):
+        self.DF = pd.read_csv(self.inputFile, sep=sep, encoding=encode, encoding_errors='ignore', engine='c')
 
     def GetFullDataFrame(self):
         return self.DF
@@ -16,12 +16,15 @@ class Read:
     def GetListAllCols(self):
         return self.DF.columns.tolist()
 
-    def CountDuplicateColumn(self, ColumnName):
-        tmp = self.DF.filter(like=ColumnName).count()
-        return len(tmp) - 1 
+    # def CountDuplicateColumn(self, ColumnName):
+    #     tmp = self.DF.filter(like=ColumnName).count()
+    #     return len(tmp) - 1 
 
     def GetFullData(self):
         return self.DF.values
+
+    def Get_x3(self):
+        return self.DF.head()
 
 class Write:
     def __init__(self, columns):

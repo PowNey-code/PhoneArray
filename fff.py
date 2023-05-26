@@ -24,11 +24,11 @@ def find_separator(path, encode):
         return False
     return separators[0]
 
-def find_header_csv(path, encode):
-    f = open(path, 'r', encoding=encode)
-    line = f.readline()
-    f.close
-    return not any(map(str.isdigit, line))
+def find_header(columns):
+    for col in columns:
+        if any(map(str.isdigit, str(col))):
+            return False
+    return True
 
-def find_header_xls(path, encode):
-    pass
+def find_Col_w_Phone(Rows):
+    print(Rows)

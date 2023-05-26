@@ -51,23 +51,35 @@ class UI(QMainWindow, ClassUI):
 
             if not self.SrcFullPathFile == '':
                 self.SrcContent = self.Read_SrcContent()
+                if self.SrcContent:
+                    self.Src_ListAllCols = self.SrcContent.GetListAllCols()
 
-                self.Src_ListAllCols = self.SrcContent.GetListAllCols()
-                self.Src_LenAllCols = len(self.Src_ListAllCols)
-                print(self.Src_ListAllCols)
-                # self.Columns_SrcNew.clear()
-                # self.SrcNew_SelectedColumns.clear()
-                # if len(self.AsGoodPrecision) > 0:
-                #     self.btnGenerateOutput.setEnabled(True)
-                # tmp = []
-                # for col in Src_ListAllCols:
-                #     self.Columns_SrcNew.addItem(col)
-                #     if col in prm.SrcNew_cols_with_address:
-                #         tmp.append(col)
+                    self.header = f.find_header(self.Src_ListAllCols)
+                    if self.header:
+                        self.RADIO_Head_Y.setChecked(True)
+                    else:
+                        self.RADIO_Head_N.setChecked(True)
 
+                    self.Src_LenAllCols = len(self.Src_ListAllCols)
+                    self.SPINBOX_Column_w_Phone.setMaximum(self.Src_LenAllCols)
+                    self.SPINBOX_Insert_After.setMaximum(self.Src_LenAllCols)
+
+                    print(self.Src_ListAllCols)
+                    print(self.Src_LenAllCols)
+                    # self.Columns_SrcNew.clear()
+                    # self.SrcNew_SelectedColumns.clear()
+                    # if len(self.AsGoodPrecision) > 0:
+                    #     self.btnGenerateOutput.setEnabled(True)
+                    # tmp = []
+                    # for col in Src_ListAllCols:
+                    #     self.Columns_SrcNew.addItem(col)
+                    #     if col in prm.SrcNew_cols_with_address:
+                    #         tmp.append(col)
+                else:
+                    # параметры файла не определены
+                    pass
 
             else:
-                del self.SrcNew
                 self.BTN_Open_Reset()
 
 
@@ -84,29 +96,19 @@ class UI(QMainWindow, ClassUI):
         self.Src_FileName, self.Src_FileExtension = os.path.splitext(Src_FileName)
         
         SrcContent = Excel.Read(self.SrcFullPathFile)
-        if self.Src_FileExtension.lower() == '.csv':    
-            
+        if self.Src_FileExtension.lower() == '.csv':        
             encode = f.get_encode_file_auto(self.SrcFullPathFile)
-
-
-            self.header = f.find_header_csv(self.SrcFullPathFile, encode)
-            if self.header:
-                self.RADIO_Head_Y.setChecked(True)
-            else:
-                self.RADIO_Head_N.setChecked(True)
-
             self.sep = f.find_separator(self.SrcFullPathFile, encode)
-            # если сепаратор не найден
             if self.sep:
                 self.LE_Separator.setText(self.sep)
-                SrcContent.Read_csv(self.sep)
+                SrcContent.Read_csv(self.sep, encode)
             else:
-                pass
+                return False
         else:
+            self.LE_Separator.setText('Не требуется')
             SrcContent.Read_xlx()
 
         return SrcContent
-
 
 if __name__ == "__main__":
     QCoreApplication.setAttribute(Qt.AA_ShareOpenGLContexts)

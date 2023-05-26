@@ -24,7 +24,8 @@ class Read:
         return self.DF.values
 
     def Get_x3(self):
-        return self.DF.head()
+        # return self.DF.values.tolist()
+        return self.DF.iloc[:10]
 
 class Write:
     def __init__(self, columns):

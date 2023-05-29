@@ -45,17 +45,21 @@ def find_Col_w_Phone(Rows, headIs):
 
         headers_alike = dict(sorted(headers_alike.items(), reverse=True, key=lambda item: item[1]))
         header_alike = next(iter(headers_alike))
-        print(header_alike)
+        print('Судя по заголовку, номер телефона вероятнее всего содержится в колонке № ' + str(header_alike))
 
+    cols_alike = {}
     i = 0
     for header in Rows:
         print('\n' + header)
         col = Rows[header]
         for val in col:
-            if '' in val:
-                print(val)
-        
+            if type(val) == int:
+                cols_alike[i] = len(str(val))
+            else:
+                if not any(map(lambda s: s.isalpha() and not s.isdigit(), val)):
+                    cols_alike[i] = len(val)
         i += 1
+        print(cols_alike)
 
             
 

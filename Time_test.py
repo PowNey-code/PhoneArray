@@ -1,30 +1,22 @@
 import time
-
-
-str = 'aaaa 123 bbb'
+val = ' '
 start = time.time()
 
-# import re
 
-# for i in range(0, 1000):
-#     if re.search('\d+', str) is not None:
+
+# for i in range(0, 100000):
+#     if any(map(lambda s: s.isdigit(), val)):
 #         print(True)
 #     else:
 #         print(False)
 
-# end = time.time() - start
-# print(end)
 
+# if any(map(lambda s: s.isalpha() and not s.isdigit(), val)):
+if not any(s.isalpha() and (not s.isdigit() or s.isspace()) for s in val):
 
-
-tt = any(map(str.isdigit, str))
-print(tt)
-
-# for i in range(0, 1000):
-#     if any(map(str.isdigit(), 'qwe1')):
-#         print(True)
-#     else:
-#         print(False)
+    print('Цифра')
+else:
+    print('Буква')
 
 end = time.time() - start
 print(end)

@@ -47,12 +47,15 @@ def find_Col_w_Phone(Rows, headIs):
         header_alike = next(iter(headers_alike))
         print(header_alike)
 
-
-    for el in Rows:
-        print('\n' + el)
-        col = Rows[el]
+    i = 0
+    for header in Rows:
+        print('\n' + header)
+        col = Rows[header]
         for val in col:
-            print(val)
+            if '' in val:
+                print(val)
+        
+        i += 1
 
             
 

@@ -37,8 +37,9 @@ if header:
 else:
     print('Заголовок НЕ найден')
 
-tmp = SrcContent.Get_x3()
-f.find_Col_w_Phone(tmp, header)
+tmp = SrcContent.Get_First_20_Rows()
+t = f.find_Col_w_Phone(tmp, header)
+print(t)
 
 # Src_LenAllCols = len(Src_ListAllCols)
 

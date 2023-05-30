@@ -64,6 +64,14 @@ class UI(QMainWindow, ClassUI):
                     self.SPINBOX_Column_w_Phone.setMaximum(self.Src_LenAllCols)
                     self.SPINBOX_Insert_After.setMaximum(self.Src_LenAllCols)
 
+                    tmp = self.SrcContent.Get_First_20_Rows()
+                    tmp = f.find_Col_w_Phone(tmp, self.header)
+                    if tmp:
+                        self.Col_w_Phone = tmp + 1
+                        self.SPINBOX_Column_w_Phone.setValue(self.Col_w_Phone)
+                    else:
+                        self.SPINBOX_Column_w_Phone.setValue(0)
+
                     print(self.Src_ListAllCols)
                     print(self.Src_LenAllCols)
                     # self.Columns_SrcNew.clear()

@@ -1,4 +1,5 @@
 import chardet
+import re
 
 def get_encode_file_auto(FPath):
     with open(FPath, 'rb') as f:
@@ -31,7 +32,7 @@ def find_header(columns):
     return True
 
 def find_Col_w_Phone(Rows, headIs):
-    # print(Rows)
+    # Если заголовок присутствует
     if headIs:
         Variable_Word_Phone = ['телефон', 'номер', 'phon', 'number', 'telefon', 'telephon']
         headers_alike = {}
@@ -40,35 +41,42 @@ def find_Col_w_Phone(Rows, headIs):
             header = header.lower()
             for word in Variable_Word_Phone:
                 if word in header:
+                    # проставляем коэффициент точности к номеру каждой колонке в которой найдено совпадение 
                     headers_alike[i] = len(word) / len(header)
             i += 1
 
-        headers_alike = dict(sorted(headers_alike.items(), reverse=True, key=lambda item: item[1]))
-        header_alike = next(iter(headers_alike))
-        print('Судя по заголовку, номер телефона вероятнее всего содержится в колонке № ' + str(header_alike))
+        # сортируем все найденные значения коэффициентов по убыванию
+        if len(headers_alike) > 0:
+            headers_alike = dict(sorted(headers_alike.items(), reverse=True, key=lambda item: item[1]))
+            header_alike = next(iter(headers_alike))
+        else:
+            header_alike = False
 
+    # Поиск по содержимому колонок
     cols_alike = {}
     i = 0
     for header in Rows:
-        print('\n' + header)
         col = Rows[header]
         for val in col:
             if type(val) == int:
                 cols_alike[i] = len(str(val))
             else:
-                if not any(map(lambda s: s.isalpha() and not s.isdigit(), val)):
+                if re.search(r"^[\d\s\(\)\-+]{6,22}$", val):
                     cols_alike[i] = len(val)
         i += 1
-        print(cols_alike)
+    
+    if len(cols_alike) > 0:
+        if header_alike:
+            if header_alike in cols_alike:
+                PhoneCol = header_alike
+        else:
+            # Ищем наиближайший к 11
+            for val in cols_alike:
+                cols_alike[val] = abs(11 - cols_alike[val])
 
-            
-
-    if headIs:
-        pass
+            cols_alike = dict(sorted(cols_alike.items(), key=lambda item: item[1]))
+            PhoneCol = next(iter(cols_alike))
     else:
-        pass
+        PhoneCol = header_alike
 
-    # избавиться от нан и поискать буквы во всех столбцах, где букв нет там и номер
-        # print(rr)
-        # for r in Rows[rr]:
-        #     print(r)
+    return PhoneCol

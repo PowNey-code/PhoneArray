@@ -23,8 +23,7 @@ class Read:
     def GetFullData(self):
         return self.DF.values
 
-    def Get_x3(self):
-        # return self.DF.values.tolist()
+    def Get_First_20_Rows(self):
         return self.DF.iloc[:20].fillna('')
 
 class Write:

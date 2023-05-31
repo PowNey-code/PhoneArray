@@ -4,9 +4,10 @@ import re
 def get_encode_file_auto(FPath):
     with open(FPath, 'rb') as f:
         encode = chardet.detect(f.read(10000))['encoding']
-        if encode in ['windows-1251', 'utf-8']:
+        if encode in ['windows-1251', 'windows-1252', 'utf-8']:
             return encode
-        else: return 'latin'
+        else: return 'utf-8'
+        # else: return 'latin'
 
 def find_separator(path, encode):
     separators = [',', ':', ';', '|']
@@ -33,6 +34,7 @@ def find_header(columns):
 
 def find_Col_w_Phone(Rows, headIs):
     # Если заголовок присутствует
+    print(Rows)
     if headIs:
         Variable_Word_Phone = ['телефон', 'номер', 'phon', 'number', 'telefon', 'telephon']
         headers_alike = {}
@@ -58,22 +60,28 @@ def find_Col_w_Phone(Rows, headIs):
     for header in Rows:
         col = Rows[header]
         for val in col:
-            if type(val) == int:
-                cols_alike[i] = len(str(val))
+            if type(val) == bool: continue
+            elif type(val) == int:
+                cols_alike[i] = abs(11 - len(str(val)))
             else:
                 if re.search(r"^[\d\s\(\)\-+]{6,22}$", val):
-                    cols_alike[i] = len(val)
+                    cols_alike[i] = abs(11 - len(val))
         i += 1
     
+
     if len(cols_alike) > 0:
         if header_alike:
             if header_alike in cols_alike:
                 PhoneCol = header_alike
+            else:
+                # придумать алгоритм
+                cols_alike = dict(sorted(cols_alike.items(), key=lambda item: item[1]))
+                key = next(iter(cols_alike))
+
+
+
         else:
             # Ищем наиближайший к 11
-            for val in cols_alike:
-                cols_alike[val] = abs(11 - cols_alike[val])
-
             cols_alike = dict(sorted(cols_alike.items(), key=lambda item: item[1]))
             PhoneCol = next(iter(cols_alike))
     else:

@@ -97,7 +97,7 @@ class UI(QMainWindow, ClassUI):
         self.LE_Path.setText('')
         self.LE_Separator.setText('')
         self.SrcFullPathFile = ''
-        print('НЕ Опен')
+        print('Резет')
 
     def Read_SrcContent(self):
         Src_FileName = os.path.basename(self.SrcFullPathFile)
@@ -106,7 +106,9 @@ class UI(QMainWindow, ClassUI):
         SrcContent = Excel.Read(self.SrcFullPathFile)
         if self.Src_FileExtension.lower() == '.csv':        
             encode = f.get_encode_file_auto(self.SrcFullPathFile)
+            print('Кодировка файла определена как "' + encode + '"')
             self.sep = f.find_separator(self.SrcFullPathFile, encode)
+            print('Разделитель определен как "' + self.sep + '"')
             if self.sep:
                 self.LE_Separator.setText(self.sep)
                 SrcContent.Read_csv(self.sep, encode)

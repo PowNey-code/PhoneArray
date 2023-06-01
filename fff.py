@@ -77,6 +77,8 @@ def find_Col_w_Phone(Rows, headIs):
                 # придумать алгоритм
                 cols_alike = dict(sorted(cols_alike.items(), key=lambda item: item[1]))
                 key = next(iter(cols_alike))
+                tmp = cols_alike[key]
+                tmp = (11 - tmp) / 11
 
 
 

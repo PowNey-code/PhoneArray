@@ -14,11 +14,18 @@ headers_alike[0] = len(word) / len(header)
 #     cols_alike[val] = abs(11 - cols_alike[val])
 
 cols_alike = {0: 2, 2: 0, 4: 4}
+# cols_alike = {0: 11}
 cols_alike = dict(sorted(cols_alike.items(), key=lambda item: item[1]))
 print(cols_alike)
 
-tmp = cols_alike[next(iter(cols_alike))]
-tmp = (11 - tmp) / 11
+key = next(iter(cols_alike))
+tmp = cols_alike[key]
+if tmp == 11:
+    tmp = 0
+else:
+    tmp = round(((11 - tmp) / 11) * 100)
+
+
 
 print(tmp)
 

@@ -33,8 +33,11 @@ def find_header(columns):
     return True
 
 def find_Col_w_Phone(Rows, headIs):
+    # преимущество в определении колонки с номером телефона
+    # если + то преимущество будет у заголовка,
+    # если минус то у содержимого колонки
+    privilege = 10
     # Если заголовок присутствует
-    print(Rows)
     if headIs:
         Variable_Word_Phone = ['телефон', 'номер', 'phon', 'number', 'telefon', 'telephon']
         headers_alike = {}
@@ -74,16 +77,23 @@ def find_Col_w_Phone(Rows, headIs):
             if header_alike in cols_alike:
                 PhoneCol = header_alike
             else:
-                # придумать алгоритм
+                # Ищем ближайший к 11
                 cols_alike = dict(sorted(cols_alike.items(), key=lambda item: item[1]))
                 key = next(iter(cols_alike))
                 tmp = cols_alike[key]
-                tmp = (11 - tmp) / 11
+                if tmp == 11:
+                    rate_col = 0
+                else:
+                    rate_col = round(((11 - tmp) / 11) * 100)
 
-
-
+                rate_header = headers_alike[header_alike] * 100
+                rate_header += privilege
+                if rate_header >= rate_col:
+                    PhoneCol = header_alike
+                else:
+                    PhoneCol = key
         else:
-            # Ищем наиближайший к 11
+            # Ищем ближайший к 11
             cols_alike = dict(sorted(cols_alike.items(), key=lambda item: item[1]))
             PhoneCol = next(iter(cols_alike))
     else:

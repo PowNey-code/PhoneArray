@@ -37,3 +37,25 @@ print(headers_alike[0])
 
 end = time.time() - start
 print('\n' + str(end))
+
+
+
+out_D = 180
+in_D = 155
+h = 100
+Len_on_circle_one_rebro = 8
+
+out_D -= 2
+in_D += 2
+h -= 8
+
+length_circle = 3.14 * out_D
+print('Длина окружности: ' + str(length_circle))
+
+total_reber = length_circle / Len_on_circle_one_rebro
+print('Всего рёбер: ' + str(total_reber))
+
+mm_one_rebro = (out_D - in_D) * 2
+total_len_filter = total_reber * mm_one_rebro
+square = round ((total_len_filter * h) / 100)
+print('Общая площадь фильтрующего элемента: ' + str(square) + ' см')

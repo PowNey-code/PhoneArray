@@ -10,14 +10,14 @@ Arrays_list = prm()['Auto_Update']['Arrays'].copy()
 folder = prm()['Auto_Update']['folder']
 
 def Check_Arrays():
-    i = 0
+    # i = 0
     for file in Arrays_list:
         path = f'{params.P}{folder}\{file}.csv'
         if os.path.isfile(path):
             size = os.path.getsize(path)
             if size == 0:
                 Download_file(file)
-            else: i += 1
+            # else: i += 1
         else:
             Download_file(file)
 

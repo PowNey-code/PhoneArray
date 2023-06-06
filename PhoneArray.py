@@ -2,6 +2,7 @@
 import urllib.request
 from params import P, Params
 import Update as upd
+import Time_test as upd
 from MakeClassFromUI import ClassFromUI
 import Excel
 import fff as f
@@ -10,7 +11,7 @@ import time
 import os
 import sys
 from PySide6.QtWidgets import QApplication, QMainWindow, QFileDialog
-from PySide6.QtCore import QCoreApplication, Qt
+from PySide6.QtCore import QCoreApplication, Qt, Slot
 
 
 #! Надо проверить есть ли файлы вообще
@@ -32,10 +33,16 @@ class UI(QMainWindow, ClassUI):
         self.BTN_Browse.clicked.connect(self.BTN_Open)
         self.TBTN_Reset_Path.clicked.connect(self.BTN_Open_Reset)
 
+        is_db = upd.Check_Arrays(self)
+
         # self.BTN_Render.setEnabled(True)
 
 
         self.show()
+
+    @Slot(int)
+    def PW(self, i):
+        print(i)
 
     def BTN_Open(self):
         path = QFileDialog.getOpenFileName(

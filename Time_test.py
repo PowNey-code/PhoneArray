@@ -39,18 +39,6 @@ end = time.time() - start
 print('\n' + str(end))
 
 
-S1 = 2.32
-S2 = 2.97
-S3 = 3.12
-
-
-price = 805
-price = 590
-# price = 590
-print('Лист 1525*1525 - Цена за кв. м. ' + str(price / S1))
-print('Лист 2440*1220 - Цена за кв. м. ' + str(price / S2))
-print('Лист 2500*1250 - Цена за кв. м. ' + str(price / S3))
-
 
 from PySide6.QtWidgets import QApplication, QPushButton
 from PySide6.QtCore import QObject, Signal, Slot

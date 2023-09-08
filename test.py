@@ -1,6 +1,7 @@
 # проверить размер файла на сервере
 import params
 import Excel
+import Update as upd
 import fff as f
 prm = params.Params()
 
@@ -47,3 +48,9 @@ print(t)
 
 
 
+# is_db = upd.Check_Arrays()
+# print(is_db)
+
+is_db = upd.Check_Update_Arrays_for_present('ABC-4xx')
+
+print(is_db)

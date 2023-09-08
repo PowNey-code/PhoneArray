@@ -2,7 +2,6 @@
 import urllib.request
 from params import P, Params
 import Update as upd
-import Time_test as upd
 from MakeClassFromUI import ClassFromUI
 import Excel
 import fff as f
@@ -13,8 +12,10 @@ import sys
 from PySide6.QtWidgets import QApplication, QMainWindow, QFileDialog
 from PySide6.QtCore import QCoreApplication, Qt, Slot
 
-
+#! Если плохо распозналась кодировка файла то дать возможность ввести кодировку в ручную
 #! Надо проверить есть ли файлы вообще
+#! Адрес от куда берутся обновления чтобы можно было редактировать в настройках
+#! Проверка и обновление основного ПО
 prm = Params()
 # upd.Check_Arrays()
 # different_date = abs((date.today() - prm.last_Update).days)
@@ -33,15 +34,37 @@ class UI(QMainWindow, ClassUI):
         self.BTN_Browse.clicked.connect(self.BTN_Open)
         self.TBTN_Reset_Path.clicked.connect(self.BTN_Open_Reset)
 
-        is_db = upd.Check_Arrays(self)
+        is_db = upd.Check_Arrays()
+        self.show()
+
+        print(is_db)
+
+        if is_db == 'all_good':
+            #! сначала сверить с настройками а надо ли проверять обновления
+            old_bases = upd.Check_Update_Arrays()
+            if type(old_bases) == list:
+                print(old_bases)
+                # предложить обновить файлы из списка list
+            
+        elif is_db == 'no_folder':
+            os.mkdir(prm()['Auto_Update']['folder'])
+            self.BTN_Browse.setEnabled(False)
+            # Выдать сообщение что в папке prm['Auto_Update']['folder'] не найдены базы, предложить скачать все файлы иначе заблокировать кнопку обзор
+        else:
+            self.BTN_Browse.setEnabled(False)
+            need_bases = upd.Check_Update_Arrays_for_present(is_db)
+            print(need_bases)
+            # В need_bases список отсутсвующих и устаревших файлов, надо предложить скачать только отсутсвующие или обновить всё, иначе заблокировать кнопку обзор
+
+
+
 
         # self.BTN_Render.setEnabled(True)
 
 
-        self.show()
 
     @Slot(int)
-    def PW(self, i):
+    def ProgressWindow(self, i):
         print(i)
 
     def BTN_Open(self):

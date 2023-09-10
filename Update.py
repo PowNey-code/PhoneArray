@@ -45,13 +45,13 @@ def Check_Update_Arrays(aa=Arrays_list):
         tmp = time.ctime(dt_file)
         d = datetime.strptime(tmp, "%a %b %d %H:%M:%S %Y").date()
 
-        Arrays[file] = {'size': size, 'date': d, 'old':0}
+        Arrays[file] = {'size': size, 'server_date':'no', 'local_date': d, 'status':'0'}
 
     for file in Arrays:
         url = f"{prm()['Auto_Update']['URL_Update']}{file}.csv"
         server_file_size = urllib.request.urlopen('http://' + url).length
         if server_file_size != Arrays[file]['size']:
-            Arrays[file]['old'] = 1
+            Arrays[file]['status'] = 'old'
     
     with urllib.request.urlopen('https://' + prm()['Auto_Update']['URL_Update']) as response:
         if response.getcode() == 200:
@@ -61,7 +61,6 @@ def Check_Update_Arrays(aa=Arrays_list):
 
     if page:
         for file in Arrays:
-            if Arrays[file]['old'] == 1: continue
             Pos_s = page.find(file, 140)
             if Pos_s == -1: continue
             Pos_s = page.find('/a>', Pos_s) + 3
@@ -73,13 +72,16 @@ def Check_Update_Arrays(aa=Arrays_list):
             tmp = page[Pos_s:Pos_e].strip()
             tmp = datetime.strptime(tmp, "%d-%b-%Y %H:%M").date()
 
-            if tmp > Arrays[file]['date']:
-                Arrays[file]['old'] = 1
+            Arrays[file]['server_date'] = tmp
+            if Arrays[file]['status'] == 'old': continue
+
+            if tmp > Arrays[file]['local_date']:
+                Arrays[file]['status'] = 'old'
     
-    Resp = []
+    Resp = {}
     for file in Arrays:
-        if Arrays[file]['old'] == 1:
-            Resp.append(file)
+        if Arrays[file]['status'] == 'old':
+            Resp[file] = {'server_date': Arrays[file]['server_date'], 'local_date': Arrays[file]['local_date'], 'status': Arrays[file]['status']}
 
     if len(Resp) == 0:
         return 'all_updated'
@@ -104,6 +106,6 @@ def Check_Update_Arrays_for_present(absent_files):
         tmp = Check_Update_Arrays(Array_to_check)
         if len(tmp) > 0:
             for file in tmp:
-                Resp[file] = {'status':'old'}
+                Resp[file] = {'server_date': tmp[file]['server_date'], 'local_date':tmp[file]['local_date'], 'status':'old'}
     
     return Resp

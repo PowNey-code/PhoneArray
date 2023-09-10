@@ -1,10 +1,10 @@
-# проверить размер файла на сервере
-import urllib.request
 from params import P, Params
 import Update as upd
-from MakeClassFromUI import ClassFromUI
 import Excel
 import fff as f
+from Dialog_Update import Update_Ask
+import urllib.request
+from MakeClassFromUI import ClassFromUI
 from datetime import datetime, date
 import time
 import os
@@ -16,13 +16,8 @@ from PySide6.QtCore import QCoreApplication, Qt, Slot
 #! Надо проверить есть ли файлы вообще
 #! Адрес от куда берутся обновления чтобы можно было редактировать в настройках
 #! Проверка и обновление основного ПО
+
 prm = Params()
-# upd.Check_Arrays()
-# different_date = abs((date.today() - prm.last_Update).days)
-# if different_date >= prm.frequency:
-#     upd.Check_Update_Arrays()
-
-
 
 ClassUI = ClassFromUI(P + 'UI.ui')
 class UI(QMainWindow, ClassUI):
@@ -36,15 +31,18 @@ class UI(QMainWindow, ClassUI):
 
         is_db = upd.Check_Arrays()
         self.show()
-
         print(is_db)
 
+        #! После успешного обновления отметить в базе дату когда прошли обновления
         if is_db == 'all_good':
-            #! сначала сверить с настройками а надо ли проверять обновления
-            old_bases = upd.Check_Update_Arrays()
-            if type(old_bases) == list:
-                print(old_bases)
-                # предложить обновить файлы из списка list
+            different_date = abs((date.today() - prm.last_Update).days)
+            if different_date >= prm.update_frequency:
+
+                old_bases = upd.Check_Update_Arrays()
+                if type(old_bases) == dict:
+                    # предложить обновить файлы из списка list
+                    print('Пробуем открыть диалоговое окно')
+                    self.Update_Ask = Update_Ask(old_bases)
             
         elif is_db == 'no_folder':
             os.mkdir(prm()['Auto_Update']['folder'])
@@ -54,7 +52,7 @@ class UI(QMainWindow, ClassUI):
             self.BTN_Browse.setEnabled(False)
             need_bases = upd.Check_Update_Arrays_for_present(is_db)
             print(need_bases)
-            # В need_bases список отсутсвующих и устаревших файлов, надо предложить скачать только отсутсвующие или обновить всё, иначе заблокировать кнопку обзор
+            # В need_bases список отсутствующих и устаревших файлов, надо предложить скачать только отсутсвующие или обновить всё, иначе заблокировать кнопку обзор
 
 
 

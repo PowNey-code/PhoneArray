@@ -3,6 +3,7 @@ import params
 import Excel
 import Update as upd
 import fff as f
+from datetime import datetime, date
 prm = params.Params()
 
 
@@ -51,6 +52,17 @@ print(t)
 # is_db = upd.Check_Arrays()
 # print(is_db)
 
-is_db = upd.Check_Update_Arrays_for_present('ABC-4xx')
+# old_bases = upd.Check_Update_Arrays()
+# print(old_bases)
 
-print(is_db)
+bases = upd.Check_Update_Arrays_for_present('DEF-9xx')
+print(type(bases))
+print(bases)
+
+if any([bases[file]['status'] == 'no_file' for file in bases]):
+    print('нашли')
+    fff = 'sdfsdf ' + bases['ABC-4xx']['local_date'].strftime('%m.%d.%Y')
+
+    print(fff)
+else:
+    print('не нашли')

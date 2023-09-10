@@ -13,8 +13,8 @@ class Params:
     paramsDefault = {
         'Auto_Update': {
             'folder': 'Arrays',
-            'frequency': 1,
-            'last_Update': '18.05.2023',
+            'update_frequency': 30,
+            'last_Update': '06.08.2023',
             'URL_Update': 'opendata.digital.gov.ru/downloads/',
             'Arrays': ['DEF-9xx', 'ABC-8xx', 'ABC-4xx', 'ABC-3xx']
         },
@@ -60,14 +60,14 @@ class Params:
     # -----
 
     # ----- Получить/Установить интервал обновления номерных ёмкостей
-    def get_frequency(self):
-        return self.prm['Auto_Update']['frequency']
+    def get_update_frequency(self):
+        return self.prm['Auto_Update']['update_frequency']
 
-    def set_frequency(self, n):
-        self.prm['Auto_Update']['frequency'] = n
+    def set_update_frequency(self, n):
+        self.prm['Auto_Update']['update_frequency'] = n
         return self.writeParams(self.prm)
 
-    frequency = property(get_frequency, set_frequency)
+    update_frequency = property(get_update_frequency, set_update_frequency)
     # -----
 
 

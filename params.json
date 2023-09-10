@@ -1,1 +1,1 @@
-{"Auto_Update": {"folder": "Arrays", "frequency": 1, "last_Update": "18.05.2023", "URL_Update": "opendata.digital.gov.ru/downloads/", "Arrays": ["DEF-9xx", "ABC-8xx", "ABC-4xx", "ABC-3xx"]}, "SrcNew_cols_with_address": ["mesto_gitelstva", "uehal"], "Prepare_Date": "None"}
+{"Auto_Update": {"folder": "Arrays", "update_frequency": 30, "last_Update": "06.08.2023", "URL_Update": "opendata.digital.gov.ru/downloads/", "Arrays": ["DEF-9xx", "ABC-8xx", "ABC-4xx", "ABC-3xx"]}, "SrcNew_cols_with_address": ["mesto_gitelstva", "uehal"], "Prepare_Date": "None"}

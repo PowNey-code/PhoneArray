@@ -18,11 +18,13 @@ class Update_Ask(QDialog):
         self.bases = bases
         print(type(bases))
         print(bases)
-        
 
         if type(bases) == dict:
+            # Если некоторые файлы отсутствуют и возможно некоторые нужно обновить
             if any([bases[f]['status'] == 'no_file' for f in bases]):
                 print('нашли')
+
+            # Если все файлы найдены но нуждаются в обновлении
             else:
                 print('не нашли')
                 for i, file in enumerate(bases, start = 0):
@@ -41,6 +43,7 @@ class Update_Ask(QDialog):
 
         else:
             pass
+            # Нужно сообщить что папка с номерной ёмкостью не обнаружена, и предложить скачать их
 
         self.Answer = QLabel(mess)
         self.Answer.setFont(QFont('Verdana', 10))

@@ -34,6 +34,7 @@ class UI(QMainWindow, ClassUI):
         print(is_db)
 
         #! После успешного обновления отметить в базе дату когда прошли обновления
+        # Если все файлы номерной ёмкости найдены
         if is_db == 'all_good':
             different_date = abs((date.today() - prm.last_Update).days)
             if different_date >= prm.update_frequency:
@@ -44,10 +45,13 @@ class UI(QMainWindow, ClassUI):
                     print('Пробуем открыть диалоговое окно')
                     self.Update_Ask = Update_Ask(old_bases)
             
+        # Если папка с файлами номерной ёмкости вообще не найдена
         elif is_db == 'no_folder':
             os.mkdir(prm()['Auto_Update']['folder'])
             self.BTN_Browse.setEnabled(False)
             # Выдать сообщение что в папке prm['Auto_Update']['folder'] не найдены базы, предложить скачать все файлы иначе заблокировать кнопку обзор
+        
+        # Если хоть один из файлов номерной ёмкости не найден
         else:
             self.BTN_Browse.setEnabled(False)
             need_bases = upd.Check_Update_Arrays_for_present(is_db)

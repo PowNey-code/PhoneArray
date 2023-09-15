@@ -1,6 +1,8 @@
-from PySide6.QtWidgets import QDialog, QStyle, QVBoxLayout, QLabel, QDialogButtonBox, QPushButton
+from params import P, Params
+from PySide6.QtWidgets import QDialog, QStyle, QVBoxLayout, QHBoxLayout, QLabel, QDialogButtonBox, QPushButton
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QFont
+prm = Params()
 
 class Update_Ask(QDialog):
     # def __init__(self, MainWindow):
@@ -22,11 +24,23 @@ class Update_Ask(QDialog):
         if type(bases) == dict:
             # Если некоторые файлы отсутствуют и возможно некоторые нужно обновить
             if any([bases[f]['status'] == 'no_file' for f in bases]):
-                print('нашли')
+                # Если некоторые файлы отсутствуют и некоторые нужно обновить
+                if any([bases[f]['status'] == 'old' for f in bases]):
+                    mess = f"Некоторые файлы с номерной ёмкостью отсутствуют(без них работа не возможна), а некоторые устарели.<br>Скачать недостающие и обновить устаревшие файлы?"
+                    text_btn_positiv = 'Скачать и обновить все'
+                    text_btn_negativ = 'Завершить работу программы'
+
+                    self.btn_neutral = QPushButton("Скачать только недостающие", autoDefault=False)
+                    self.btn_neutral.setFont(QFont('Verdana', 11))
+
+                # Если некоторые файлы отсутствуют
+                else:
+                    mess = f"Некоторые файлы с номерной ёмкостью отсутствуют, без них работа не возможна.<br>Скачать недостающие файлы?"
+                    text_btn_positiv = 'Скачать'
+                    text_btn_negativ = 'Завершить работу программы'
 
             # Если все файлы найдены но нуждаются в обновлении
             else:
-                print('не нашли')
                 for i, file in enumerate(bases, start = 0):
                     if i == 0:
                         newest_date = bases[file]['server_date']
@@ -39,32 +53,41 @@ class Update_Ask(QDialog):
                         newest_date = bases[file]['server_date']
 
                 mess = f"Доступны новые версии номерных ёмкостей (<span style='color:green'>{newest_date.strftime('%d.%m.%Y')}</span>), сейчас установленны <span style='color:red'>{oldest_date.strftime('%d.%m.%Y')}</span>.<br>Скачать обновления?"
-                
+                text_btn_positiv = 'Обновить'
+                text_btn_negativ = 'Напомнить следующий раз'
 
+        # Если папка папка с номерной ёмкостью не обнаружена
         else:
-            pass
-            # Нужно сообщить что папка с номерной ёмкостью не обнаружена, и предложить скачать их
+            mess = f"Директория содержащая номерную ёмкость ({P}{prm()['Auto_Update']['folder']}) не обнаружена, без неё работа не возможна.<br>Скачать номерную ёмкость?"
+            text_btn_positiv = 'Скачать'
+            text_btn_negativ = 'Завершить работу программы'
+
 
         self.Answer = QLabel(mess)
         self.Answer.setFont(QFont('Verdana', 10))
 
-        self.btn_update_all = QPushButton("Обновить", default=True)
-        self.btn_update_all.setFont(QFont('Verdana', 11))
-        self.btn_update_all.setStyleSheet("color: green;")
-        self.btn_update_all.setFixedSize(180, 42)
+        self.btn_positiv = QPushButton(text_btn_positiv, default=True)
+        self.btn_positiv.setFont(QFont('Verdana', 11))
+        self.btn_positiv.setStyleSheet("color: green; padding: 6 15;")
 
-        self.btn_cancel = QPushButton("Напомнить следующий раз", autoDefault=False)
-        self.btn_cancel.setFont(QFont('Verdana', 11))
-        self.btn_cancel.setStyleSheet("color: red;")
-        self.btn_cancel.setFixedSize(250, 42)
+        self.btn_negativ = QPushButton(text_btn_negativ, autoDefault=False)
+        self.btn_negativ.setFont(QFont('Verdana', 11))
+        self.btn_negativ.setStyleSheet("color: red; padding: 6 15;")
 
-        self.btn_box = QDialogButtonBox()
-        self.btn_box.addButton(self.btn_update_all, QDialogButtonBox.AcceptRole)
-        self.btn_box.addButton(self.btn_cancel, QDialogButtonBox.RejectRole)
+        # self.btn_box = QDialogButtonBox()
+        # self.btn_box.addButton(self.btn_update_all, QDialogButtonBox.AcceptRole)
+        # self.btn_box.addButton(self.btn_cancel, QDialogButtonBox.RejectRole)
+
+        self.Hlayout = QHBoxLayout()
+        self.Hlayout.addWidget(self.btn_positiv)
+        if hasattr(self, 'btn_neutral'):
+            self.Hlayout.addWidget(self.btn_neutral)
+        self.Hlayout.addWidget(self.btn_negativ)
+
 
         self.Vlayout = QVBoxLayout(self)
         self.Vlayout.addWidget(self.Answer)
-        self.Vlayout.addWidget(self.btn_box)
+        self.Vlayout.addLayout(self.Hlayout)
     
         # btn_update_all.clicked.connect(lambda: MainWindow.dialog_report(question='y', SenderName='direction'))
         # btn_cancel.clicked.connect(lambda: MainWindow.dialog_report(question='n', SenderName='direction'))

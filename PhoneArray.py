@@ -47,16 +47,16 @@ class UI(QMainWindow, ClassUI):
             
         # Если папка с файлами номерной ёмкости вообще не найдена
         elif is_db == 'no_folder':
-            os.mkdir(prm()['Auto_Update']['folder'])
+            # os.mkdir(prm()['Auto_Update']['folder'])
             self.BTN_Browse.setEnabled(False)
-            # Выдать сообщение что в папке prm['Auto_Update']['folder'] не найдены базы, предложить скачать все файлы иначе заблокировать кнопку обзор
+            self.Update_Ask = Update_Ask(is_db)
         
         # Если хоть один из файлов номерной ёмкости не найден
         else:
             self.BTN_Browse.setEnabled(False)
             need_bases = upd.Check_Update_Arrays_for_present(is_db)
             print(need_bases)
-            # В need_bases список отсутствующих и устаревших файлов, надо предложить скачать только отсутсвующие или обновить всё, иначе заблокировать кнопку обзор
+            self.Update_Ask = Update_Ask(need_bases)
 
 
 

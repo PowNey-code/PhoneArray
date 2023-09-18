@@ -98,8 +98,9 @@ class Update_Ask(QDialog):
         # btn_update_all.clicked.connect(lambda: MainWindow.dialog_report(question='y', SenderName='direction'))
 
     def Update(self):
-        pass
-
+        # https://s-nako.work/2020/10/how-to-clear-layout-in-pyside/
+        # self.Vlayout.clearLayout(self.Hlayout)
+        self.Vlayout.removeItem(self.Hlayout)
 
     def closeProgram(self):
         self.MainWindow.close()

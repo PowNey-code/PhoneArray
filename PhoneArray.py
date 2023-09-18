@@ -43,23 +43,20 @@ class UI(QMainWindow, ClassUI):
                 if type(old_bases) == dict:
                     # предложить обновить файлы из списка list
                     print('Пробуем открыть диалоговое окно')
-                    self.Update_Ask = Update_Ask(old_bases)
+                    self.Update_Ask = Update_Ask(self, bases=old_bases)
             
         # Если папка с файлами номерной ёмкости вообще не найдена
         elif is_db == 'no_folder':
             # os.mkdir(prm()['Auto_Update']['folder'])
             self.BTN_Browse.setEnabled(False)
-            self.Update_Ask = Update_Ask(is_db)
+            self.Update_Ask = Update_Ask(self, bases=is_db)
         
         # Если хоть один из файлов номерной ёмкости не найден
         else:
             self.BTN_Browse.setEnabled(False)
             need_bases = upd.Check_Update_Arrays_for_present(is_db)
             print(need_bases)
-            self.Update_Ask = Update_Ask(need_bases)
-
-
-
+            self.Update_Ask = Update_Ask(self, bases=need_bases)
 
         # self.BTN_Render.setEnabled(True)
 

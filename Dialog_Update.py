@@ -1,6 +1,6 @@
 from params import P, Params
 import os
-from PySide6.QtWidgets import QDialog, QStyle, QVBoxLayout, QHBoxLayout, QLabel, QDialogButtonBox, QPushButton
+from PySide6.QtWidgets import QDialog, QStyle, QVBoxLayout, QHBoxLayout, QLabel, QProgressBar, QPushButton
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QFont
 prm = Params()
@@ -15,7 +15,7 @@ class Update_Ask(QDialog):
         self.setWindowIcon(self.style().standardIcon(QStyle.SP_BrowserReload))
         self.setWindowFlags(Qt.WindowSystemMenuHint)
         self.setWindowTitle('Обновление номерных ёмкостей')
-        self.resize(250, 200)
+        # self.resize(250, 200)
 
         self.MainWindow = MainWindow
         self.bases = bases
@@ -109,12 +109,15 @@ class Update_Ask(QDialog):
                 total_size += self.bases[f]['server_size']
                 total_files += 1
 
-        self.Answer.setText(f'Скачиваем последнюю версию номерной ёмкости.<br>')
+        self.Answer.setText(f'Скачиваем последнюю версию номерной ёмкости.')
 
-
-        self.statusBar = QLabel(f'Всего {total_files} файл(а), общим объёмом на {total_size/1024} Кб.')
+        self.statusBar = QLabel(f'Всего {total_files} файл(а), общим объёмом на {total_size/1024} Кб.', alignment = Qt.AlignHCenter)
         self.statusBar.setFont(QFont('Verdana', 10))
         self.Vlayout.addWidget(self.statusBar)
+
+        self.ProgressBar = QProgressBar()
+        self.Vlayout.addWidget(self.ProgressBar)
+        self.ProgressBar.setValue(0)
 
 
     def Update_neutral(self):

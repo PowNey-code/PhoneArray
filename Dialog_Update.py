@@ -1,4 +1,5 @@
 from params import P, Params
+import os
 from PySide6.QtWidgets import QDialog, QStyle, QVBoxLayout, QHBoxLayout, QLabel, QDialogButtonBox, QPushButton
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QFont
@@ -18,7 +19,6 @@ class Update_Ask(QDialog):
 
         self.MainWindow = MainWindow
         self.bases = bases
-        print(type(bases))
         print(bases)
 
         if type(bases) == dict:
@@ -33,7 +33,7 @@ class Update_Ask(QDialog):
                     self.btn_negativ = QPushButton('Завершить работу программы', autoDefault=False)
 
                     self.btn_positiv.clicked.connect(self.Update)
-                    self.btn_neutral.clicked.connect(self.Update)
+                    self.btn_neutral.clicked.connect(self.Update_neutral)
                     self.btn_negativ.clicked.connect(self.closeProgram)
 
                 # Если некоторые файлы отсутствуют
@@ -98,9 +98,32 @@ class Update_Ask(QDialog):
         # btn_update_all.clicked.connect(lambda: MainWindow.dialog_report(question='y', SenderName='direction'))
 
     def Update(self):
-        # https://s-nako.work/2020/10/how-to-clear-layout-in-pyside/
-        # self.Vlayout.clearLayout(self.Hlayout)
-        self.Vlayout.removeItem(self.Hlayout)
+        self.clear_layout(self.Hlayout)
+        if type(self.bases) != dict:
+            os.mkdir(prm()['Auto_Update']['folder'])
+        
+        total_size = 0
+        total_files = 0
+        for f in self.bases:
+            if self.bases[f]['status'] == 'no_file' or self.bases[f]['status'] == 'old':
+                total_size += self.bases[f]['server_size']
+                total_files += 1
+
+        self.Answer.setText(f'Скачиваем последнюю версию номерной ёмкости.<br>')
+
+
+        self.statusBar = QLabel(f'Всего {total_files} файл(а), общим объёмом на {total_size/1024} Кб.')
+        self.statusBar.setFont(QFont('Verdana', 10))
+        self.Vlayout.addWidget(self.statusBar)
+
+
+    def Update_neutral(self):
+        self.clear_layout(self.Hlayout)
+
+    def clear_layout(self, layout):
+        for i in range(layout.count()):
+            child = layout.itemAt(i).widget()
+            child.deleteLater()
 
     def closeProgram(self):
         self.MainWindow.close()

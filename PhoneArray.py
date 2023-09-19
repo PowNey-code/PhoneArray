@@ -16,6 +16,7 @@ from PySide6.QtCore import QCoreApplication, Qt, Slot
 #! Надо проверить есть ли файлы вообще
 #! Адрес от куда берутся обновления чтобы можно было редактировать в настройках
 #! Проверка и обновление основного ПО
+#! Поискать список перебежчиков.
 
 prm = Params()
 
@@ -31,23 +32,18 @@ class UI(QMainWindow, ClassUI):
 
         is_db = upd.Check_Arrays()
         self.show()
-        print(is_db)
 
         #! После успешного обновления отметить в базе дату когда прошли обновления
         # Если все файлы номерной ёмкости найдены
         if is_db == 'all_good':
             different_date = abs((date.today() - prm.last_Update).days)
             if different_date >= prm.update_frequency:
-
                 old_bases = upd.Check_Update_Arrays()
                 if type(old_bases) == dict:
-                    # предложить обновить файлы из списка list
-                    print('Пробуем открыть диалоговое окно')
                     self.Update_Ask = Update_Ask(self, bases=old_bases)
             
         # Если папка с файлами номерной ёмкости вообще не найдена
         elif is_db == 'no_folder':
-            # os.mkdir(prm()['Auto_Update']['folder'])
             self.BTN_Browse.setEnabled(False)
             self.Update_Ask = Update_Ask(self, bases=is_db)
         
@@ -55,7 +51,6 @@ class UI(QMainWindow, ClassUI):
         else:
             self.BTN_Browse.setEnabled(False)
             need_bases = upd.Check_Update_Arrays_for_present(is_db)
-            print(need_bases)
             self.Update_Ask = Update_Ask(self, bases=need_bases)
 
         # self.BTN_Render.setEnabled(True)

@@ -35,6 +35,7 @@ def Check_Arrays():
 def Download_file(filename):
     print('скачивание началось')
 
+
 def Check_Update_Arrays(aa=Arrays_list):
     Arrays = {}
     for file in aa:
@@ -45,12 +46,17 @@ def Check_Update_Arrays(aa=Arrays_list):
         tmp = time.ctime(dt_file)
         d = datetime.strptime(tmp, "%a %b %d %H:%M:%S %Y").date()
 
-        Arrays[file] = {'size': size, 'server_date':'no', 'local_date': d, 'status':'0'}
+        Arrays[file] = {
+            'local_size': size,
+            'server_size': 0,
+            'server_date':'no',
+            'local_date': d,
+            'status':'0'
+        }
 
     for file in Arrays:
-        url = f"{prm()['Auto_Update']['URL_Update']}{file}.csv"
-        server_file_size = urllib.request.urlopen('http://' + url).length
-        if server_file_size != Arrays[file]['size']:
+        Arrays[file]['server_size'] = get_server_file_size(file)
+        if Arrays[file]['server_size'] != Arrays[file]['local_size']:
             Arrays[file]['status'] = 'old'
     
     with urllib.request.urlopen('https://' + prm()['Auto_Update']['URL_Update']) as response:
@@ -81,11 +87,17 @@ def Check_Update_Arrays(aa=Arrays_list):
     Resp = {}
     for file in Arrays:
         if Arrays[file]['status'] == 'old':
-            Resp[file] = {'server_date': Arrays[file]['server_date'], 'local_date': Arrays[file]['local_date'], 'status': Arrays[file]['status']}
+            Resp[file] = {
+                'server_size': Arrays[file]['server_size'],
+                'server_date': Arrays[file]['server_date'],
+                'local_date': Arrays[file]['local_date'],
+                'status': Arrays[file]['status']
+            }
 
     if len(Resp) == 0:
         return 'all_updated'
     else: return Resp
+
 
 def Check_Update_Arrays_for_present(absent_files):
     absent_array = absent_files.split(',')
@@ -93,19 +105,36 @@ def Check_Update_Arrays_for_present(absent_files):
 
     if len(absent_array) == len(Arrays_list):
         for file in Arrays_list:
-            Resp[file] = {'status':'no_file'}
+            Resp[file] = {
+                'server_size': get_server_file_size(file),
+                'status':'no_file'
+            }
 
     else:
         Array_to_check = []
         for file in Arrays_list:
             if file in absent_array:
-                Resp[file] = {'status':'no_file'}
+                Resp[file] = {
+                    'server_size': get_server_file_size(file),
+                    'status':'no_file'
+                }
             else:
                 Array_to_check.append(file)
 
         tmp = Check_Update_Arrays(Array_to_check)
         if len(tmp) > 0:
             for file in tmp:
-                Resp[file] = {'server_date': tmp[file]['server_date'], 'local_date':tmp[file]['local_date'], 'status':'old'}
+                Resp[file] = {
+                    'server_size': tmp[file]['server_size'],
+                    'server_date': tmp[file]['server_date'],
+                    'local_date':tmp[file]['local_date'],
+                    'status':'old'
+                }
     
     return Resp
+
+
+def get_server_file_size(file):
+    url = f"{prm()['Auto_Update']['URL_Update']}{file}.csv"
+    size = urllib.request.urlopen('http://' + url).length
+    return size

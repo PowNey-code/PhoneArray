@@ -1,12 +1,12 @@
 from params import P, Params
+import fn
 import os
-from PySide6.QtWidgets import QDialog, QStyle, QVBoxLayout, QHBoxLayout, QLabel, QProgressBar, QPushButton
+from PySide6.QtWidgets import QDialog, QStyle, QVBoxLayout, QHBoxLayout, QLabel, QProgressBar, QPushButton, QSpacerItem, QSizePolicy
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QFont
 prm = Params()
 
 class Update_Ask(QDialog):
-    # def __init__(self, MainWindow):
     def __init__(self, MainWindow, bases):
         super(Update_Ask, self).__init__()
         
@@ -84,6 +84,7 @@ class Update_Ask(QDialog):
         self.btn_negativ.setFont(QFont('Verdana', 11))
         self.btn_negativ.setStyleSheet("color: red; padding: 6 15;")
 
+
         self.Hlayout = QHBoxLayout()
         self.Hlayout.addWidget(self.btn_positiv)
         if hasattr(self, 'btn_neutral'):
@@ -92,6 +93,10 @@ class Update_Ask(QDialog):
 
         self.Vlayout = QVBoxLayout(self)
         self.Vlayout.addWidget(self.Answer)
+        
+        self.VSpacer = QSpacerItem(20, 15, QSizePolicy.Expanding)
+        self.Vlayout.addItem(self.VSpacer)
+
         self.Vlayout.addLayout(self.Hlayout)
     
         self.show()
@@ -111,13 +116,13 @@ class Update_Ask(QDialog):
 
         self.Answer.setText(f'Скачиваем последнюю версию номерной ёмкости.')
 
-        self.statusBar = QLabel(f'Всего {total_files} файл(а), общим объёмом на {total_size/1024} Кб.', alignment = Qt.AlignHCenter)
+        self.statusBar = QLabel(f'Всего {total_files} файл(а), общим объёмом на {fn.format_digit(total_size/1024)} Кб.', alignment = Qt.AlignHCenter)
         self.statusBar.setFont(QFont('Verdana', 10))
         self.Vlayout.addWidget(self.statusBar)
 
         self.ProgressBar = QProgressBar()
-        self.Vlayout.addWidget(self.ProgressBar)
         self.ProgressBar.setValue(0)
+        self.Vlayout.addWidget(self.ProgressBar)
 
 
     def Update_neutral(self):

@@ -1,7 +1,7 @@
 from params import P, Params
 import Update as upd
 import Excel
-import fff as f
+import fn
 from Dialog_Update import Update_Ask
 import urllib.request
 from MakeClassFromUI import ClassFromUI
@@ -78,7 +78,7 @@ class UI(QMainWindow, ClassUI):
                 if self.SrcContent:
                     self.Src_ListAllCols = self.SrcContent.GetListAllCols()
 
-                    self.header = f.find_header(self.Src_ListAllCols)
+                    self.header = fn.find_header(self.Src_ListAllCols)
                     if self.header:
                         self.RADIO_Head_Y.setChecked(True)
                     else:
@@ -89,7 +89,7 @@ class UI(QMainWindow, ClassUI):
                     self.SPINBOX_Insert_After.setMaximum(self.Src_LenAllCols)
 
                     tmp = self.SrcContent.Get_First_20_Rows()
-                    self.Col_w_Phone = f.find_Col_w_Phone(tmp, self.header)
+                    self.Col_w_Phone = fn.find_Col_w_Phone(tmp, self.header)
                     if self.Col_w_Phone:
                         self.SPINBOX_Column_w_Phone.setValue(self.Col_w_Phone + 1)
                     else:
@@ -128,9 +128,9 @@ class UI(QMainWindow, ClassUI):
         
         SrcContent = Excel.Read(self.SrcFullPathFile)
         if self.Src_FileExtension.lower() == '.csv':        
-            encode = f.get_encode_file_auto(self.SrcFullPathFile)
+            encode = fn.get_encode_file_auto(self.SrcFullPathFile)
             print('Кодировка файла определена как "' + encode + '"')
-            self.sep = f.find_separator(self.SrcFullPathFile, encode)
+            self.sep = fn.find_separator(self.SrcFullPathFile, encode)
             print('Разделитель определен как "' + self.sep + '"')
             if self.sep:
                 self.LE_Separator.setText(self.sep)

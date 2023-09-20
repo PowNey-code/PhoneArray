@@ -100,3 +100,7 @@ def find_Col_w_Phone(Rows, headIs):
         PhoneCol = header_alike
 
     return PhoneCol
+
+def format_digit(dig):
+    round_dig = round(dig)
+    return '{0:,}'.format(round_dig).replace(',', ' ')

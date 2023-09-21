@@ -109,7 +109,6 @@ class Update_Ask(QDialog):
             if self.bases[f]['status'] == 'no_file' or self.bases[f]['status'] == 'old':
                 total_size += self.bases[f]['server_size']
 
-        # progressBar = PW.PW(f'Общий объём {fn.format_digit(total_size/1024)} Кб.')
         self.progressBar = PW.PW(
             Title = 'Скачиваем свежую номерную ёмкость',
             MaxCount = total_size,
@@ -118,16 +117,17 @@ class Update_Ask(QDialog):
         )
 
 
-        self.closeWindow()
+        # self.closeWindow()
+        # self.setVisible(False)
 
     def Update_neutral(self):
         self.clear_layout(self.Hlayout)
 
 
-    def clear_layout(self, layout):
-        for i in range(layout.count()):
-            child = layout.itemAt(i).widget()
-            child.deleteLater()
+    # def clear_layout(self, layout):
+    #     for i in range(layout.count()):
+    #         child = layout.itemAt(i).widget()
+    #         child.deleteLater()
 
 
     def closeProgram(self):

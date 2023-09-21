@@ -101,6 +101,6 @@ def find_Col_w_Phone(Rows, headIs):
 
     return PhoneCol
 
-def format_digit(dig):
+def format_digit(dig:int) -> str:
     round_dig = round(dig)
     return '{0:,}'.format(round_dig).replace(',', ' ')

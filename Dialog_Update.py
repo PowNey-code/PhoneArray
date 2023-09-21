@@ -1,5 +1,6 @@
 from params import P, Params
 import fn
+import ProgressWindow as PW
 import os
 from PySide6.QtWidgets import QDialog, QStyle, QVBoxLayout, QHBoxLayout, QLabel, QProgressBar, QPushButton, QSpacerItem, QSizePolicy
 from PySide6.QtCore import Qt
@@ -96,46 +97,43 @@ class Update_Ask(QDialog):
         
         self.VSpacer = QSpacerItem(20, 15, QSizePolicy.Expanding)
         self.Vlayout.addItem(self.VSpacer)
-
         self.Vlayout.addLayout(self.Hlayout)
     
         self.show()
         # btn_update_all.clicked.connect(lambda: MainWindow.dialog_report(question='y', SenderName='direction'))
 
+
     def Update(self):
-        self.clear_layout(self.Hlayout)
-        if type(self.bases) != dict:
-            os.mkdir(prm()['Auto_Update']['folder'])
-        
         total_size = 0
-        total_files = 0
         for f in self.bases:
             if self.bases[f]['status'] == 'no_file' or self.bases[f]['status'] == 'old':
                 total_size += self.bases[f]['server_size']
-                total_files += 1
 
-        self.Answer.setText(f'Скачиваем последнюю версию номерной ёмкости.')
+        # progressBar = PW.PW(f'Общий объём {fn.format_digit(total_size/1024)} Кб.')
+        self.progressBar = PW.PW(
+            Title = 'Скачиваем свежую номерную ёмкость',
+            MaxCount = total_size,
+            H1 = 'Скачиваем последнюю версию номерной ёмкости.',
+            Descr = 'Общий объём $$ Кб.'
+        )
 
-        self.statusBar = QLabel(f'Всего {total_files} файл(а), общим объёмом на {fn.format_digit(total_size/1024)} Кб.', alignment = Qt.AlignHCenter)
-        self.statusBar.setFont(QFont('Verdana', 10))
-        self.Vlayout.addWidget(self.statusBar)
 
-        self.ProgressBar = QProgressBar()
-        self.ProgressBar.setValue(0)
-        self.Vlayout.addWidget(self.ProgressBar)
-
+        self.closeWindow()
 
     def Update_neutral(self):
         self.clear_layout(self.Hlayout)
+
 
     def clear_layout(self, layout):
         for i in range(layout.count()):
             child = layout.itemAt(i).widget()
             child.deleteLater()
 
+
     def closeProgram(self):
         self.MainWindow.close()
         self.close()
+
 
     def closeWindow(self):
         self.close()

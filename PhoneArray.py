@@ -55,12 +55,7 @@ class UI(QMainWindow, ClassUI):
 
         # self.BTN_Render.setEnabled(True)
 
-
-
-    @Slot(int)
-    def ProgressWindow(self, i):
-        print(i)
-
+  
     def BTN_Open(self):
         path = QFileDialog.getOpenFileName(
             caption='Выбрать XLSX, XLS или CSV файл',

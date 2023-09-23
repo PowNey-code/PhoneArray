@@ -2,7 +2,7 @@ from params import P, Params
 import fn
 import ProgressWindow as PW
 import os
-from PySide6.QtWidgets import QDialog, QStyle, QVBoxLayout, QHBoxLayout, QLabel, QProgressBar, QPushButton, QSpacerItem, QSizePolicy
+from PySide6.QtWidgets import QDialog, QStyle, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QSpacerItem, QSizePolicy
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QFont
 prm = Params()

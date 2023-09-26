@@ -3,7 +3,7 @@ import fn
 import ProgressWindow as PW
 import os
 from PySide6.QtWidgets import QDialog, QStyle, QVBoxLayout, QHBoxLayout, QLabel, QProgressBar, QPushButton, QSpacerItem, QSizePolicy
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, QThread, Signal
 from PySide6.QtGui import QFont
 prm = Params()
 
@@ -34,7 +34,7 @@ class Update_Ask(QDialog):
                     self.btn_negativ = QPushButton('Завершить работу программы', autoDefault=False)
 
                     self.btn_positiv.clicked.connect(self.Update)
-                    self.btn_neutral.clicked.connect(self.Update_neutral)
+                    self.btn_neutral.clicked.connect(lambda:self.Update(how='no_files'))
                     self.btn_negativ.clicked.connect(self.closeProgram)
 
                 # Если некоторые файлы отсутствуют
@@ -103,12 +103,25 @@ class Update_Ask(QDialog):
         # btn_update_all.clicked.connect(lambda: MainWindow.dialog_report(question='y', SenderName='direction'))
 
 
-    def Update(self):
+    def Update(self, how='all'):
         total_size = 0
-        for f in self.bases:
-            if self.bases[f]['status'] == 'no_file' or self.bases[f]['status'] == 'old':
-                total_size += self.bases[f]['server_size']
+        print(how)
+        if how != 'all':
+            bases = {}
+            for f in self.bases:
+                if self.bases[f]['status'] == 'no_file':
+                    bases[f] = self.bases[f]
+                    total_size += bases[f]['server_size']
 
+        else:
+            bases = self.bases
+            for f in bases:
+                print(123)
+                print(bases[f]['server_size'])
+                total_size += bases[f]['server_size']
+
+        print(type(total_size))
+        print(total_size)
         self.progressBar = PW.PW(
             Title = 'Скачиваем свежую номерную ёмкость',
             MaxCount = total_size,
@@ -116,6 +129,8 @@ class Update_Ask(QDialog):
             Descr = 'Общий объём $$ Кб.'
         )
 
+        self.UpdateThread = UpdateThread(MW=self, bases=bases)
+        self.UpdateThread.start()
 
         # self.closeWindow()
         # self.setVisible(False)
@@ -137,3 +152,16 @@ class Update_Ask(QDialog):
 
     def closeWindow(self):
         self.close()
+
+
+class UpdateThread(QThread):
+    progressChanged = Signal(int)
+    def __init__(self, MW, bases:dict):
+        super(UpdateThread, self).__init__()
+        self.MW = MW
+        self.bases = bases
+        self.progressChanged.connect(self.MW.progressBar)
+
+
+    def run(self):
+        print('получили' + str(len(self.bases)))

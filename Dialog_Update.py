@@ -33,7 +33,8 @@ class Update_Ask(QDialog):
                     self.btn_neutral.setFont(QFont('Verdana', 11))
                     self.btn_negativ = QPushButton('Завершить работу программы', autoDefault=False)
 
-                    self.btn_positiv.clicked.connect(self.Update)
+                    # self.btn_positiv.clicked.connect(self.Update)
+                    self.btn_positiv.clicked.connect(lambda: self.Update(how='all'))
                     self.btn_neutral.clicked.connect(lambda:self.Update(how='no_files'))
                     self.btn_negativ.clicked.connect(self.closeProgram)
 
@@ -43,7 +44,8 @@ class Update_Ask(QDialog):
                     self.btn_positiv = QPushButton('Скачать', default=True)
                     self.btn_negativ = QPushButton('Завершить работу программы', autoDefault=False)
 
-                    self.btn_positiv.clicked.connect(self.Update)
+                    # self.btn_positiv.clicked.connect(self.Update)
+                    self.btn_positiv.clicked.connect(lambda: self.Update(how='all'))
                     self.btn_negativ.clicked.connect(self.closeProgram)
 
             # Если все файлы найдены но нуждаются в обновлении
@@ -63,7 +65,8 @@ class Update_Ask(QDialog):
                 self.btn_positiv = QPushButton('Обновить', default=True)
                 self.btn_negativ = QPushButton('Напомнить следующий раз', autoDefault=False)
 
-                self.btn_positiv.clicked.connect(self.Update)
+                # self.btn_positiv.clicked.connect(self.Update)
+                self.btn_positiv.clicked.connect(lambda: self.Update(how='all'))
                 self.btn_negativ.clicked.connect(self.closeWindow)
 
         # Если папка папка с номерной ёмкостью не обнаружена
@@ -72,7 +75,8 @@ class Update_Ask(QDialog):
             self.btn_positiv = QPushButton('Скачать', default=True)
             self.btn_negativ = QPushButton('Завершить работу программы', autoDefault=False)
 
-            self.btn_positiv.clicked.connect(self.Update)
+            # self.btn_positiv.clicked.connect(self.Update)
+            self.btn_positiv.clicked.connect(lambda: self.Update(how='all'))
             self.btn_negativ.clicked.connect(self.closeProgram)
 
 
@@ -103,9 +107,8 @@ class Update_Ask(QDialog):
         # btn_update_all.clicked.connect(lambda: MainWindow.dialog_report(question='y', SenderName='direction'))
 
 
-    def Update(self, how='all'):
+    def Update(self, how:str):
         total_size = 0
-        print(how)
         if how != 'all':
             bases = {}
             for f in self.bases:
@@ -116,12 +119,8 @@ class Update_Ask(QDialog):
         else:
             bases = self.bases
             for f in bases:
-                print(123)
-                print(bases[f]['server_size'])
                 total_size += bases[f]['server_size']
 
-        print(type(total_size))
-        print(total_size)
         self.progressBar = PW.PW(
             Title = 'Скачиваем свежую номерную ёмкость',
             MaxCount = total_size,
@@ -164,4 +163,5 @@ class UpdateThread(QThread):
 
 
     def run(self):
-        print('получили' + str(len(self.bases)))
+        print('получили ' + str(len(self.bases)))
+        self.progressChanged.emit(500)

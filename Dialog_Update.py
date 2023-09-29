@@ -163,5 +163,7 @@ class UpdateThread(QThread):
 
 
     def run(self):
+
+        
         print('получили ' + str(len(self.bases)))
-        self.progressChanged.emit(500)
+        self.progressChanged.emit(12500)

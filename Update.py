@@ -33,6 +33,7 @@ def Check_Arrays():
 
 
 def Download_file(filename):
+
     print('скачивание началось')
 
 
@@ -127,8 +128,8 @@ def Check_Update_Arrays_for_present(absent_files):
                 Resp[file] = {
                     'server_size': tmp[file]['server_size'],
                     'server_date': tmp[file]['server_date'],
-                    'local_date':tmp[file]['local_date'],
-                    'status':'old'
+                    'local_date': tmp[file]['local_date'],
+                    'status': 'old'
                 }
     
     return Resp

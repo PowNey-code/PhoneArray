@@ -1,7 +1,7 @@
 from params import P, Params
-import fn
+# import fn
 import ProgressWindow as PW
-import os
+# import os
 from PySide6.QtWidgets import QDialog, QStyle, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QSpacerItem, QSizePolicy
 from PySide6.QtCore import Qt, QThread, Signal
 from PySide6.QtGui import QFont
@@ -163,7 +163,13 @@ class UpdateThread(QThread):
 
 
     def run(self):
-
-        
         print('получили ' + str(len(self.bases)))
+        print(self.bases)
+
+
+        for f in self.bases:
+            f
+
+
         self.progressChanged.emit(12500)
+

@@ -32,11 +32,6 @@ def Check_Arrays():
     else: return no_files
 
 
-def Download_file(filename):
-
-    print('скачивание началось')
-
-
 def Check_Update_Arrays(aa=Arrays_list):
     Arrays = {}
     for file in aa:

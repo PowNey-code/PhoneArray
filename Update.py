@@ -1,5 +1,5 @@
 # проверить размер файла на сервере
-import urllib.request
+from urllib.request import urlopen
 from params import P, Params
 from datetime import datetime
 import time
@@ -55,7 +55,7 @@ def Check_Update_Arrays(aa=Arrays_list):
         if Arrays[file]['server_size'] != Arrays[file]['local_size']:
             Arrays[file]['status'] = 'old'
     
-    with urllib.request.urlopen('https://' + prm()['Auto_Update']['URL_Update']) as response:
+    with urlopen('https://' + prm()['Auto_Update']['URL_Update']) as response:
         if response.getcode() == 200:
             page = str(response.read())
         else:
@@ -130,7 +130,7 @@ def Check_Update_Arrays_for_present(absent_files):
     return Resp
 
 
-def get_server_file_size(file):
+def get_server_file_size(file:str) -> int:
     url = f"{prm()['Auto_Update']['URL_Update']}{file}.csv"
-    size = urllib.request.urlopen('http://' + url).length
+    size = urlopen('http://' + url).length
     return size

@@ -2,9 +2,11 @@ from params import P, Params
 # import fn
 import ProgressWindow as PW
 # import os
+# import requests
 from PySide6.QtWidgets import QDialog, QStyle, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QSpacerItem, QSizePolicy
 from PySide6.QtCore import Qt, QThread, Signal
 from PySide6.QtGui import QFont
+
 prm = Params()
 
 class Update_Ask(QDialog):
@@ -128,14 +130,14 @@ class Update_Ask(QDialog):
             Descr = 'Общий объём $$ Кб.'
         )
 
-        self.UpdateThread = UpdateThread(MW=self, bases=bases)
+        self.UpdateThread = UpdateThread(MW=self, total_size = total_size, bases = bases)
         self.UpdateThread.start()
 
         # self.closeWindow()
         # self.setVisible(False)
 
-    def Update_neutral(self):
-        self.clear_layout(self.Hlayout)
+    # def Update_neutral(self):
+    #     self.clear_layout(self.Hlayout)
 
 
     # def clear_layout(self, layout):
@@ -155,9 +157,10 @@ class Update_Ask(QDialog):
 
 class UpdateThread(QThread):
     progressChanged = Signal(int)
-    def __init__(self, MW, bases:dict):
+    def __init__(self, MW, total_size:int, bases:dict):
         super(UpdateThread, self).__init__()
         self.MW = MW
+        self.total_size = total_size
         self.bases = bases
         self.progressChanged.connect(self.MW.progressBar)
 
@@ -166,10 +169,19 @@ class UpdateThread(QThread):
         print('получили ' + str(len(self.bases)))
         print(self.bases)
 
-
+        size_downloaded = 0
         for f in self.bases:
-            f
+            url = 'http://' + prm()['Auto_Update']['URL_Update'] + f + '.csv'
+            with open(P + f + '.csv', 'wb') as dwnloaded:
+                response = requests.get(url, stream=True)
 
+                # for data in response.iter_content(chunk_size=max(int(self.total_size/100), 1024*1024)):
+                for data in response.iter_content(chunk_size=int(self.total_size/100)):
+                    size_downloaded += len(data)
+                    dwnloaded.write(data)
 
-        self.progressChanged.emit(12500)
+                    lastEmited = size_downloaded
+                    if size_downloaded - lastEmited >= int(self.total_size/100):
+                        self.progressChanged.emit(size_downloaded)
 
+        self.progressChanged.emit(self.total_size)

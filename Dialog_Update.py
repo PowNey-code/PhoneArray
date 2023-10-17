@@ -2,7 +2,7 @@ from params import P, Params
 # import fn
 import ProgressWindow as PW
 # import os
-# import requests
+from urllib.request import urlopen
 from PySide6.QtWidgets import QDialog, QStyle, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QSpacerItem, QSizePolicy
 from PySide6.QtCore import Qt, QThread, Signal
 from PySide6.QtGui import QFont
@@ -131,7 +131,8 @@ class Update_Ask(QDialog):
         )
 
         self.UpdateThread = UpdateThread(MW=self, total_size = total_size, bases = bases)
-        self.UpdateThread.start()
+        r = self.UpdateThread.start()
+        print(r)
 
         # self.closeWindow()
         # self.setVisible(False)
@@ -166,22 +167,27 @@ class UpdateThread(QThread):
 
 
     def run(self):
-        print('получили ' + str(len(self.bases)))
-        print(self.bases)
-
         size_downloaded = 0
+        chunkSize = int(self.total_size / 100)
+        
         for f in self.bases:
             url = 'http://' + prm()['Auto_Update']['URL_Update'] + f + '.csv'
-            with open(P + f + '.csv', 'wb') as dwnloaded:
-                response = requests.get(url, stream=True)
+            with urlopen(url) as r:
+                if r.getcode() != 200:
+                    return 1
 
-                # for data in response.iter_content(chunk_size=max(int(self.total_size/100), 1024*1024)):
-                for data in response.iter_content(chunk_size=int(self.total_size/100)):
-                    size_downloaded += len(data)
-                    dwnloaded.write(data)
+                filename = P + prm()['Auto_Update']['folder'] + '\\' + f + ".csv"
+                with open(filename, "wb") as dwnloaded:
+                    while True:
+                        chunk = r.read(chunkSize)
+                        if chunk is None:
+                            continue
+                        elif chunk == b"":
+                            break
 
-                    lastEmited = size_downloaded
-                    if size_downloaded - lastEmited >= int(self.total_size/100):
+                        dwnloaded.write(chunk)
+                        size_downloaded += chunkSize
                         self.progressChanged.emit(size_downloaded)
 
         self.progressChanged.emit(self.total_size)
+        return 0

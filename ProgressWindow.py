@@ -1,6 +1,6 @@
 from params import P, Params
 import fn
-import math
+import time
 from PySide6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QProgressBar, QPushButton, QSpacerItem, QSizePolicy
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QFont, QIcon
@@ -37,6 +37,8 @@ class PW(QDialog):
         self.Vlayout.addWidget(self.ProgressBar)
         self.setPrcnt(0)
 
+        # self.btn_100 = QPushButton('Хорошо', default=True)
+
         self.show()
 
 
@@ -55,15 +57,22 @@ class PW(QDialog):
 
     def setPrcnt(self, CurrentI:int):
         self.CurrentI = CurrentI
-        prcnt = CurrentI / self.MaxCount
-        prcnt = math.floor(prcnt * 100)
+        prcnt = ( CurrentI / self.MaxCount ) * 100
+        prcnt = int(prcnt)
 
         tmp = f'{fn.format_digit(CurrentI/1024)} / {fn.format_digit(self.MaxCount/1024)}'
         text = self.Descr.replace('$$', tmp)
 
         self.Label_Descr.setText(text)
         self.ProgressBar.setValue(prcnt)
+        if CurrentI >= self.MaxCount:
+            time.sleep(1)
+            self.close()
+            # self.Vlayout.addWidget(self.btn_100)
+            # self.btn_100.clicked.connect(self.closeWindow)
 
+    # def closeWindow(self):
+    #     self.close()
 
     def __call__(self, CurrentI:int):
         self.setPrcnt(CurrentI)

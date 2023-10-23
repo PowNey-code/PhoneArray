@@ -107,6 +107,7 @@ class Update_Ask(QDialog):
     
         self.show()
         # btn_update_all.clicked.connect(lambda: MainWindow.dialog_report(question='y', SenderName='direction'))
+    
 
 
     def Update(self, how:str):
@@ -131,8 +132,13 @@ class Update_Ask(QDialog):
         )
 
         self.UpdateThread = UpdateThread(MW=self, total_size = total_size, bases = bases)
-        r = self.UpdateThread.start()
-        print(r)
+        # r = self.UpdateThread.start()
+        self.UpdateThread.start()
+        self.UpdateThread.finished.connect(self.pr)
+
+    def pr(self, t):
+        print('rsdfsdf')
+        print(t)
 
         # self.closeWindow()
         # self.setVisible(False)
@@ -166,7 +172,7 @@ class UpdateThread(QThread):
         self.progressChanged.connect(self.MW.progressBar)
 
 
-    def run(self):
+    def run(self) -> int:
         size_downloaded = 0
         chunkSize = int(self.total_size / 100)
         
@@ -190,4 +196,5 @@ class UpdateThread(QThread):
                         self.progressChanged.emit(size_downloaded)
 
         self.progressChanged.emit(self.total_size)
-        return 0
+        self.terminate()
+        # return 0

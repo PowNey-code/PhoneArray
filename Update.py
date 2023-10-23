@@ -36,24 +36,26 @@ def Check_Update_Arrays(aa=Arrays_list):
     Arrays = {}
     for file in aa:
         path = f'{P}{folder}\{file}.csv'
-        size = os.path.getsize(path)
+        local_size = os.path.getsize(path)
 
         dt_file = os.path.getmtime(path)
         tmp = time.ctime(dt_file)
         d = datetime.strptime(tmp, "%a %b %d %H:%M:%S %Y").date()
 
+        server_size = get_server_file_size(file)
+
+        if server_size != local_size:
+            status = 'old'
+        else:
+            status = '0'
+
         Arrays[file] = {
-            'local_size': size,
-            'server_size': 0,
+            'local_size': local_size,
+            'server_size': server_size,
             'server_date':'no',
             'local_date': d,
-            'status':'0'
+            'status': status
         }
-
-    for file in Arrays:
-        Arrays[file]['server_size'] = get_server_file_size(file)
-        if Arrays[file]['server_size'] != Arrays[file]['local_size']:
-            Arrays[file]['status'] = 'old'
     
     with urlopen('https://' + prm()['Auto_Update']['URL_Update']) as response:
         if response.getcode() == 200:
@@ -118,7 +120,7 @@ def Check_Update_Arrays_for_present(absent_files):
                 Array_to_check.append(file)
 
         tmp = Check_Update_Arrays(Array_to_check)
-        if len(tmp) > 0:
+        if len(tmp) > 0 and tmp != 'all_updated':
             for file in tmp:
                 Resp[file] = {
                     'server_size': tmp[file]['server_size'],

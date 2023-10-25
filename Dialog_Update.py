@@ -1,6 +1,6 @@
 from params import P, Params
 # import fn
-import ProgressWindow as PW
+import Windows as Wins
 # import os
 from urllib.request import urlopen
 from PySide6.QtWidgets import QDialog, QStyle, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QSpacerItem, QSizePolicy
@@ -124,7 +124,7 @@ class Update_Ask(QDialog):
             for f in bases:
                 total_size += bases[f]['server_size']
 
-        self.progressBar = PW.PW(
+        self.progressBar = Wins.ProgressWin(
             Title = 'Скачиваем свежую номерную ёмкость',
             MaxCount = total_size,
             H1 = 'Скачиваем последнюю версию номерной ёмкости.',
@@ -132,25 +132,19 @@ class Update_Ask(QDialog):
         )
 
         self.UpdateThread = UpdateThread(MW=self, total_size = total_size, bases = bases)
-        # r = self.UpdateThread.start()
         self.UpdateThread.start()
-        self.UpdateThread.finished.connect(self.pr)
-
-    def pr(self, t):
-        print('rsdfsdf')
-        print(t)
-
-        # self.closeWindow()
-        # self.setVisible(False)
-
-    # def Update_neutral(self):
-    #     self.clear_layout(self.Hlayout)
+        self.UpdateThread.finished.connect(self.FinishUpdate)
 
 
-    # def clear_layout(self, layout):
-    #     for i in range(layout.count()):
-    #         child = layout.itemAt(i).widget()
-    #         child.deleteLater()
+    def FinishUpdate(self):
+        if self.UpdateThread.error:
+            
+            pass
+        else:
+            
+            pass
+
+        del self.UpdateThread
 
 
     def closeProgram(self):
@@ -170,6 +164,7 @@ class UpdateThread(QThread):
         self.total_size = total_size
         self.bases = bases
         self.progressChanged.connect(self.MW.progressBar)
+        self.error = False
 
 
     def run(self) -> int:
@@ -180,7 +175,7 @@ class UpdateThread(QThread):
             url = 'http://' + prm()['Auto_Update']['URL_Update'] + f + '.csv'
             with urlopen(url) as r:
                 if r.getcode() != 200:
-                    return 1
+                    self.error = True
 
                 filename = P + prm()['Auto_Update']['folder'] + '\\' + f + ".csv"
                 with open(filename, "wb") as dwnloaded:
@@ -196,5 +191,4 @@ class UpdateThread(QThread):
                         self.progressChanged.emit(size_downloaded)
 
         self.progressChanged.emit(self.total_size)
-        self.terminate()
-        # return 0
+

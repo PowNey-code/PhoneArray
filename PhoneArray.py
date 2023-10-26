@@ -5,12 +5,11 @@ import fn
 from Dialog_Update import Update_Ask
 import urllib.request
 from MakeClassFromUI import ClassFromUI
-from datetime import datetime, date
-import time
+from datetime import date
 import os
 import sys
 from PySide6.QtWidgets import QApplication, QMainWindow, QFileDialog
-from PySide6.QtCore import QCoreApplication, Qt, Slot
+from PySide6.QtCore import QCoreApplication, Qt
 
 #! Если плохо распозналась кодировка файла то дать возможность ввести кодировку в ручную
 #! Надо проверить есть ли файлы вообще
@@ -33,11 +32,10 @@ class UI(QMainWindow, ClassUI):
         is_db = upd.Check_Arrays()
         self.show()
 
-        #! После успешного обновления отметить в базе дату когда прошли обновления
         # Если все файлы номерной ёмкости найдены
         if is_db == 'all_good':
-            different_date = abs((date.today() - prm.last_Update).days)
-            if different_date >= prm.update_frequency:
+            different_date = abs((date.today() - prm.last_Update_Arrays).days)
+            if different_date >= prm.update_frequency_Arrays:
                 old_bases = upd.Check_Update_Arrays()
                 if type(old_bases) == dict:
                     self.Update_Ask = Update_Ask(self, bases=old_bases)

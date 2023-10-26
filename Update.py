@@ -7,7 +7,7 @@ import os
 
 prm = Params()
 Arrays_list = prm()['Auto_Update']['Arrays'].copy()
-folder = prm()['Auto_Update']['folder']
+folder = prm()['Auto_Update']['folder_Arrays']
 
 def Check_Arrays():
     if not os.path.isdir(f'{P}{folder}'): return 'no_folder' # Папка с номерными ёмкостями не найдена
@@ -57,7 +57,7 @@ def Check_Update_Arrays(aa=Arrays_list):
             'status': status
         }
     
-    with urlopen('https://' + prm()['Auto_Update']['URL_Update']) as response:
+    with urlopen('https://' + prm()['Auto_Update']['URL_Update_Arrays']) as response:
         if response.getcode() == 200:
             page = str(response.read())
         else:
@@ -133,6 +133,6 @@ def Check_Update_Arrays_for_present(absent_files):
 
 
 def get_server_file_size(file:str) -> int:
-    url = f"{prm()['Auto_Update']['URL_Update']}{file}.csv"
+    url = f"{prm()['Auto_Update']['URL_Update_Arrays']}{file}.csv"
     size = urlopen('http://' + url).length
     return size

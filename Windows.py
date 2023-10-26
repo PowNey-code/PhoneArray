@@ -3,7 +3,7 @@ import fn
 import time
 from PySide6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QProgressBar, QPushButton, QSpacerItem, QSizePolicy
 from PySide6.QtCore import Qt
-from PySide6.QtGui import QFont, QIcon, QPixmap
+from PySide6.QtGui import QFont, QIcon, QPixmap, QImage
 
 
 class ProgressWin(QDialog):
@@ -73,30 +73,31 @@ class ProgressWin(QDialog):
 
 
 class MessageWin(QDialog):
-    def __init__(self, Title:str, Type:str, Descr:str):
-        super(ProgressWin, self).__init__()
+    def __init__(self, MW, Title:str, Type:str, Descr:str):
+        super(MessageWin, self).__init__()
         self.setModal(True)
         self.setAttribute(Qt.WA_DeleteOnClose, True)
         self.setWindowFlags(Qt.CustomizeWindowHint | Qt.WindowTitleHint | Qt.WindowMinimizeButtonHint)
 
+        self.MW = MW
         self.setWindowTitle(Title)
 
         if Type == 'error':
             self.setWindowIcon(QIcon(P + 'img\\error.png'))
-            self.pixmap = QPixmap(P + 'img\\error.png')
+            self.img = QImage(P + 'img\\error.png')
             self.btn = QPushButton('Закрыть программу', default=True)
-            self.btn.clicked.connect(self.closeWindow)
+            self.btn.clicked.connect(self.closeProgram)
         else:
             self.setWindowIcon(QIcon(P + 'img\\ok.png'))
-            self.pixmap = QPixmap(P + 'img\\ok.png')
+            self.img = QImage(P + 'img\\ok.png')
             self.btn = QPushButton('Хорошо', default=True)
             self.btn.clicked.connect(self.closeWindow)
 
-        self.Hlayout = QHBoxLayout(self)
+        self.Hlayout = QHBoxLayout()
 
+        self.pixmap = QPixmap(self.img.scaledToWidth(50))
         self.imgLabel = QLabel()
         self.imgLabel.setPixmap(self.pixmap)
-        self.resize(self.pixmap.width(), self.pixmap.height())
         self.Hlayout.addWidget(self.imgLabel)
 
         self.Label_Descr = QLabel(text = Descr, alignment = Qt.AlignHCenter)
@@ -109,10 +110,16 @@ class MessageWin(QDialog):
         self.VSpacer = QSpacerItem(20, 15, QSizePolicy.Expanding)
         self.Vlayout.addItem(self.VSpacer)
 
-        self.Vlayout.addItem(self.btn)
+        self.Vlayout.addWidget(self.btn)
 
         self.show()
 
 
     def closeWindow(self):
+        self.MW.closeWindow()
+        self.close()
+        
+
+    def closeProgram(self):
+        self.MW.closeProgram()
         self.close()

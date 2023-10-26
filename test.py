@@ -31,7 +31,10 @@ path = 'groupexport_b4ck4_2023-02-27.xlsx'
 r = fn.format_digit(1651654.5654)
 print(r)
 
+rr = date.today()
 
+rr = date.today().strftime("%d.%m.%Y")
+print(rr)
 
 # print(response.status_code)
 # https://pythonassets.com/posts/download-file-with-progress-bar-pyqt-pyside/

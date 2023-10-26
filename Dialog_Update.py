@@ -1,7 +1,7 @@
 from params import P, Params
 # import fn
 import Windows as Wins
-# import os
+from datetime import date
 from urllib.request import urlopen
 from PySide6.QtWidgets import QDialog, QStyle, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QSpacerItem, QSizePolicy
 from PySide6.QtCore import Qt, QThread, Signal
@@ -35,7 +35,6 @@ class Update_Ask(QDialog):
                     self.btn_neutral.setFont(QFont('Verdana', 11))
                     self.btn_negativ = QPushButton('Завершить работу программы', autoDefault=False)
 
-                    # self.btn_positiv.clicked.connect(self.Update)
                     self.btn_positiv.clicked.connect(lambda: self.Update(how='all'))
                     self.btn_neutral.clicked.connect(lambda:self.Update(how='no_files'))
                     self.btn_negativ.clicked.connect(self.closeProgram)
@@ -46,7 +45,6 @@ class Update_Ask(QDialog):
                     self.btn_positiv = QPushButton('Скачать', default=True)
                     self.btn_negativ = QPushButton('Завершить работу программы', autoDefault=False)
 
-                    # self.btn_positiv.clicked.connect(self.Update)
                     self.btn_positiv.clicked.connect(lambda: self.Update(how='all'))
                     self.btn_negativ.clicked.connect(self.closeProgram)
 
@@ -67,7 +65,6 @@ class Update_Ask(QDialog):
                 self.btn_positiv = QPushButton('Обновить', default=True)
                 self.btn_negativ = QPushButton('Напомнить следующий раз', autoDefault=False)
 
-                # self.btn_positiv.clicked.connect(self.Update)
                 self.btn_positiv.clicked.connect(lambda: self.Update(how='all'))
                 self.btn_negativ.clicked.connect(self.closeWindow)
 
@@ -77,10 +74,8 @@ class Update_Ask(QDialog):
             self.btn_positiv = QPushButton('Скачать', default=True)
             self.btn_negativ = QPushButton('Завершить работу программы', autoDefault=False)
 
-            # self.btn_positiv.clicked.connect(self.Update)
             self.btn_positiv.clicked.connect(lambda: self.Update(how='all'))
             self.btn_negativ.clicked.connect(self.closeProgram)
-
 
         self.Answer = QLabel(mess)
         self.Answer.setFont(QFont('Verdana', 10))
@@ -90,7 +85,6 @@ class Update_Ask(QDialog):
 
         self.btn_negativ.setFont(QFont('Verdana', 11))
         self.btn_negativ.setStyleSheet("color: red; padding: 6 15;")
-
 
         self.Hlayout = QHBoxLayout()
         self.Hlayout.addWidget(self.btn_positiv)
@@ -106,8 +100,6 @@ class Update_Ask(QDialog):
         self.Vlayout.addLayout(self.Hlayout)
     
         self.show()
-        # btn_update_all.clicked.connect(lambda: MainWindow.dialog_report(question='y', SenderName='direction'))
-    
 
 
     def Update(self, how:str):
@@ -138,22 +130,21 @@ class Update_Ask(QDialog):
 
     def FinishUpdate(self):
         if self.UpdateThread.error:
-            messageWindow = Wins.MessageWin(
+            self.messageWindow = Wins.MessageWin(
+                MW = self,
                 Title = 'Ошибка',
                 Type = 'error',
                 Descr = 'Во время обновления произошла ошибка, проверьте соединение с Интернетом и попробуйте ещё раз.'
             )
             self.closeProgram()
         else:
-            messageWindow = Wins.MessageWin(
+            prm.last_Update_Arrays = date.today().strftime("%d.%m.%Y")
+            self.messageWindow = Wins.MessageWin(
+                MW = self,
                 Title = 'Успех',
                 Type = 'success',
                 Descr = 'Обновление прошло успешно.'
             )
-            self.closeWindow()
-
-        del self.UpdateThread
-        del messageWindow
 
 
     def closeProgram(self):
@@ -162,6 +153,8 @@ class Update_Ask(QDialog):
 
 
     def closeWindow(self):
+        del self.UpdateThread
+        del self.messageWindow
         self.close()
 
 
@@ -181,12 +174,12 @@ class UpdateThread(QThread):
         chunkSize = int(self.total_size / 100)
         
         for f in self.bases:
-            url = 'http://' + prm()['Auto_Update']['URL_Update'] + f + '.csv'
+            url = 'http://' + prm()['Auto_Update']['URL_Update_Arrays'] + f + '.csv'
             with urlopen(url) as r:
                 if r.getcode() != 200:
                     self.error = True
 
-                filename = P + prm()['Auto_Update']['folder'] + '\\' + f + ".csv"
+                filename = P + prm()['Auto_Update']['folder_Arrays'] + '\\' + f + ".csv"
                 with open(filename, "wb") as dwnloaded:
                     while True:
                         chunk = r.read(chunkSize)

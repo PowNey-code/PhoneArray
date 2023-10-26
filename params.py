@@ -1,7 +1,5 @@
 import json
 import os
-# import re
-# import requests
 from datetime import datetime as dt
 
 P = os.path.dirname(os.path.abspath(__file__)) + '\\'
@@ -12,10 +10,10 @@ class Params:
     NameFileParams = 'params.json'
     paramsDefault = {
         'Auto_Update': {
-            'folder': 'Arrays',
-            'update_frequency': 30,
-            'last_Update': '06.08.2023',
-            'URL_Update': 'opendata.digital.gov.ru/downloads/',
+            'folder_Arrays': 'Arrays',
+            'update_frequency_Arrays': 30,
+            'last_Update_Arrays': '06.08.2023',
+            'URL_Update_Arrays': 'opendata.digital.gov.ru/downloads/',
             'Arrays': ['DEF-9xx', 'ABC-8xx', 'ABC-4xx', 'ABC-3xx']
         },
         'SrcNew_cols_with_address': ['mesto_gitelstva', 'uehal'],
@@ -49,25 +47,25 @@ class Params:
         return self.paramsDefault
         
     # ----- Получить/Установить дату последнего обновления номерных ёмкостей
-    def get_last_Update(self):
-        return dt.strptime(self.prm['Auto_Update']['last_Update'], '%d.%m.%Y').date()
+    def get_last_Update_Arrays(self):
+        return dt.strptime(self.prm['Auto_Update']['last_Update_Arrays'], '%d.%m.%Y').date()
 
-    def set_last_Update(self, d):
-        self.prm['Auto_Update']['last_Update'] = d
+    def set_last_Update_Arrays(self, d):
+        self.prm['Auto_Update']['last_Update_Arrays'] = d
         return self.writeParams(self.prm)
 
-    last_Update = property(get_last_Update, set_last_Update)
+    last_Update_Arrays = property(get_last_Update_Arrays, set_last_Update_Arrays)
     # -----
 
     # ----- Получить/Установить интервал обновления номерных ёмкостей
-    def get_update_frequency(self):
-        return self.prm['Auto_Update']['update_frequency']
+    def get_update_frequency_Arrays(self):
+        return self.prm['Auto_Update']['update_frequency_Arrays']
 
-    def set_update_frequency(self, n):
-        self.prm['Auto_Update']['update_frequency'] = n
+    def set_update_frequency_Arrays(self, n):
+        self.prm['Auto_Update']['update_frequency_Arrays'] = n
         return self.writeParams(self.prm)
 
-    update_frequency = property(get_update_frequency, set_update_frequency)
+    update_frequency_Arrays = property(get_update_frequency_Arrays, set_update_frequency_Arrays)
     # -----
 
 

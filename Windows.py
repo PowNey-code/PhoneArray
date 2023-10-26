@@ -85,13 +85,14 @@ class MessageWin(QDialog):
             self.setWindowIcon(QIcon(P + 'img\\error.png'))
             self.pixmap = QPixmap(P + 'img\\error.png')
             self.btn = QPushButton('Закрыть программу', default=True)
+            self.btn.clicked.connect(self.closeWindow)
         else:
             self.setWindowIcon(QIcon(P + 'img\\ok.png'))
             self.pixmap = QPixmap(P + 'img\\ok.png')
             self.btn = QPushButton('Хорошо', default=True)
+            self.btn.clicked.connect(self.closeWindow)
 
         self.Hlayout = QHBoxLayout(self)
-
 
         self.imgLabel = QLabel()
         self.imgLabel.setPixmap(self.pixmap)
@@ -102,9 +103,6 @@ class MessageWin(QDialog):
         self.Label_Descr.setFont(QFont('Verdana', 10))
         self.Hlayout.addWidget(self.Label_Descr)
 
-
-
-
         self.Vlayout = QVBoxLayout(self)
         self.Vlayout.addLayout(self.Hlayout)
 
@@ -113,5 +111,8 @@ class MessageWin(QDialog):
 
         self.Vlayout.addItem(self.btn)
 
-
         self.show()
+
+
+    def closeWindow(self):
+        self.close()

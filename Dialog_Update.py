@@ -138,13 +138,22 @@ class Update_Ask(QDialog):
 
     def FinishUpdate(self):
         if self.UpdateThread.error:
-            
-            pass
+            messageWindow = Wins.MessageWin(
+                Title = 'Ошибка',
+                Type = 'error',
+                Descr = 'Во время обновления произошла ошибка, проверьте соединение с Интернетом и попробуйте ещё раз.'
+            )
+            self.closeProgram()
         else:
-            
-            pass
+            messageWindow = Wins.MessageWin(
+                Title = 'Успех',
+                Type = 'success',
+                Descr = 'Обновление прошло успешно.'
+            )
+            self.closeWindow()
 
         del self.UpdateThread
+        del messageWindow
 
 
     def closeProgram(self):

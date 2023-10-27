@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>911</width>
+    <width>1101</width>
     <height>730</height>
    </rect>
   </property>
@@ -175,6 +175,23 @@
                   <number>1</number>
                  </property>
                 </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_8">
+               <property name="topMargin">
+                <number>0</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="Label_decode">
+                 <property name="text">
+                  <string>Кодировка файла:</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="LE_decode"/>
                </item>
               </layout>
              </item>
@@ -880,8 +897,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>911</width>
-     <height>18</height>
+     <width>1101</width>
+     <height>21</height>
     </rect>
    </property>
   </widget>

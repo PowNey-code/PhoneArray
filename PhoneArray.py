@@ -26,7 +26,7 @@ class UI(QMainWindow, ClassUI):
         self.setupUi(self)
 
         self.SrcFullPathFile = ''
-        self.BTN_Browse.clicked.connect(self.BTN_Open)
+        self.BTN_Browse.clicked.connect(self.OpenFile)
         self.TBTN_Reset_Path.clicked.connect(self.BTN_Open_Reset)
 
         is_db = upd.Check_Arrays()
@@ -54,7 +54,7 @@ class UI(QMainWindow, ClassUI):
         # self.BTN_Render.setEnabled(True)
 
   
-    def BTN_Open(self):
+    def OpenFile(self):
         path = QFileDialog.getOpenFileName(
             caption='Выбрать XLSX, XLS или CSV файл',
             dir=os.environ['USERPROFILE'] + '\Desktop',

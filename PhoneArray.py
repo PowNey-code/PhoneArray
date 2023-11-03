@@ -3,7 +3,7 @@ import Update as upd
 import Excel
 import fn
 from Dialog_Update import Update_Ask
-import urllib.request
+# import urllib.request
 from MakeClassFromUI import ClassFromUI
 from datetime import date
 import os
@@ -63,48 +63,46 @@ class UI(QMainWindow, ClassUI):
         )[0]
         if not path == '':
             self.SrcFullPathFile = path.replace('/', '\\')
-            
             self.LE_Path.setText(self.SrcFullPathFile)
 
-            if not self.SrcFullPathFile == '':
-                self.SrcContent = self.Read_SrcContent()
-                if self.SrcContent:
-                    self.Src_ListAllCols = self.SrcContent.GetListAllCols()
+            self.SrcContent = self.Read_SrcContent()
+            if self.SrcContent:
+                self.Src_ListAllCols = self.SrcContent.GetListAllCols()
 
-                    self.header = fn.find_header(self.Src_ListAllCols)
-                    if self.header:
-                        self.RADIO_Head_Y.setChecked(True)
-                    else:
-                        self.RADIO_Head_N.setChecked(True)
-
-                    self.Src_LenAllCols = len(self.Src_ListAllCols)
-                    self.SPINBOX_Column_w_Phone.setMaximum(self.Src_LenAllCols)
-                    self.SPINBOX_Insert_After.setMaximum(self.Src_LenAllCols)
-
-                    tmp = self.SrcContent.Get_First_20_Rows()
-                    self.Col_w_Phone = fn.find_Col_w_Phone(tmp, self.header)
-                    if self.Col_w_Phone:
-                        self.SPINBOX_Column_w_Phone.setValue(self.Col_w_Phone + 1)
-                    else:
-                        self.SPINBOX_Column_w_Phone.setValue(0)
-
-                    print(self.Src_ListAllCols)
-                    print(self.Src_LenAllCols)
-                    # self.Columns_SrcNew.clear()
-                    # self.SrcNew_SelectedColumns.clear()
-                    # if len(self.AsGoodPrecision) > 0:
-                    #     self.btnGenerateOutput.setEnabled(True)
-                    # tmp = []
-                    # for col in Src_ListAllCols:
-                    #     self.Columns_SrcNew.addItem(col)
-                    #     if col in prm.SrcNew_cols_with_address:
-                    #         tmp.append(col)
+                self.header = fn.find_header(self.Src_ListAllCols)
+                if self.header:
+                    self.RADIO_Head_Y.setChecked(True)
                 else:
-                    # параметры файла не определены
-                    pass
+                    self.RADIO_Head_N.setChecked(True)
 
+                self.Src_LenAllCols = len(self.Src_ListAllCols)
+                self.SPINBOX_Column_w_Phone.setMaximum(self.Src_LenAllCols)
+                self.SPINBOX_Insert_After.setMaximum(self.Src_LenAllCols)
+
+                tmp = self.SrcContent.Get_First_20_Rows()
+                self.Col_w_Phone = fn.find_Col_w_Phone(tmp, self.header)
+                if self.Col_w_Phone:
+                    self.SPINBOX_Column_w_Phone.setValue(self.Col_w_Phone + 1)
+                else:
+                    self.SPINBOX_Column_w_Phone.setValue(0)
+
+                print(self.Src_ListAllCols)
+                print(self.Src_LenAllCols)
+                # self.Columns_SrcNew.clear()
+                # self.SrcNew_SelectedColumns.clear()
+                # if len(self.AsGoodPrecision) > 0:
+                #     self.btnGenerateOutput.setEnabled(True)
+                # tmp = []
+                # for col in Src_ListAllCols:
+                #     self.Columns_SrcNew.addItem(col)
+                #     if col in prm.SrcNew_cols_with_address:
+                #         tmp.append(col)
             else:
-                self.BTN_Open_Reset()
+                # параметры файла не определены
+                pass
+
+        else:
+            self.BTN_Open_Reset()
 
 
 
